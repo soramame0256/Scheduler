@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.github.soramame0256.scheduler"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.github.soramame0256.scheduler"
@@ -33,6 +33,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
