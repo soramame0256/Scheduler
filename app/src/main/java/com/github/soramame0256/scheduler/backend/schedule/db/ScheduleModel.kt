@@ -13,12 +13,7 @@ import java.util.concurrent.CompletableFuture
  * daoの関数をCompletableFutureを使用したわかりやすいものに変換して返します。
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
-class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWriter {
-    override fun getSchedules(): CompletableFuture<List<CombinedSchedule>> {
-        return CompletableFuture.supplyAsync {
-            runBlocking {
-                dao.getSchedulesWithTime()
-            }
+class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWriter, TimeRangeReader, TimeRangeWriter {
     override fun getSchedules(): CompletableFuture<List<CombinedSchedule>> = CompletableFuture.supplyAsync {
         runBlocking {
             dao.getSchedulesWithTime()
@@ -55,4 +50,25 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
             dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
         }
     }
+
+    override fun insertTimeRange(timeRange: TimeRange): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            dao.insertTimeRange(timeRange)
+        }
+    }
+
+    override fun updateTimeRange(timeRange: TimeRange): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            //Todo: Daoに追加したらまた書く
+            TODO("Not yet implemented")
+        }
+    }
+
+    override fun deleteTimeRange(timeRange: TimeRange): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            //Todo: Daoに追加したらまた書く
+            TODO("Not yet implemented")
+        }
+    }
+
 }

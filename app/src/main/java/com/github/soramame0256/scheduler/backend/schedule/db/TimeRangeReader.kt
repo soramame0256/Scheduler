@@ -1,0 +1,8 @@
+package com.github.soramame0256.scheduler.backend.schedule.db
+
+import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
+import java.util.concurrent.CompletableFuture
+
+interface TimeRangeReader {
+    fun getAllTimeRanges(): CompletableFuture<List<TimeRange>>
+}
