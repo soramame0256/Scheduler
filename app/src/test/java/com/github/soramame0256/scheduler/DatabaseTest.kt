@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.soramame0256.scheduler.backend.schedule.db.AppDatabase
-import com.github.soramame0256.scheduler.backend.schedule.db.ScheduleDao
-import com.github.soramame0256.scheduler.backend.schedule.db.entity.Schedule
-import com.github.soramame0256.scheduler.backend.schedule.db.entity.TimeRange
+import com.github.soramame0256.scheduler.backend.schedule.innerdb.AppDatabase
+import com.github.soramame0256.scheduler.backend.schedule.innerdb.ScheduleDao
+import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
+import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After
