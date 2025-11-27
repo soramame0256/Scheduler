@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.github.soramame0256.scheduler.backend.schedule.Time
+import com.github.soramame0256.scheduler.backend.schedule.Weekday
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.joinedentity.CombinedSchedule
@@ -20,7 +22,7 @@ interface ScheduleDao {
     suspend fun getAllTimeRanges(): List<TimeRange>
 
     @Query("SELECT * FROM Schedule, TimeRange WHERE TimeRange.start <= :time and TimeRange.`end` >= :time and Schedule.timeRange = TimeRange.timetableId")
-    suspend fun getSchedulesAtTime(time: Int): List<CombinedSchedule>
+    suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
     @Insert(entity = Schedule::class)
     suspend fun insertSchedule(schedule: Schedule)
@@ -32,5 +34,5 @@ interface ScheduleDao {
     suspend fun updateSchedule(schedule: Schedule)
 
     @Query("SELECT * FROM Schedule, TimeRange WHERE Schedule.weekday = :weekday and Schedule.timeRange = TimeRange.timetableId and TimeRange.start <= :time and TimeRange.`end` >= :time")
-    suspend fun getSchedulesAtTimeAndWeekday(weekday: Int, time: Int): List<CombinedSchedule>
+    suspend fun getSchedulesAtTimeAndWeekday(weekday: Weekday, time: Time): List<CombinedSchedule>
 }

@@ -3,6 +3,7 @@ package com.github.soramame0256.scheduler.backend.schedule.innerdb.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import com.github.soramame0256.scheduler.backend.schedule.Weekday
 
 @Entity(tableName = "Schedule",
     foreignKeys = [ForeignKey(
@@ -14,7 +15,8 @@ import androidx.room.ForeignKey
     primaryKeys = ["weekday", "timeRange"]
 )
 data class Schedule(
-    @ColumnInfo("weekday") val weekday: Int,
+    @ColumnInfo("weekday") val weekday: Weekday,
     @ColumnInfo("timeRange") val timeRangeId: Int,
     @ColumnInfo("message") val msg: String
-)
+) {
+}
