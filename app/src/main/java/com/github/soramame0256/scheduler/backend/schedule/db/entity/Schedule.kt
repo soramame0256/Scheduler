@@ -12,10 +12,10 @@ import com.github.soramame0256.scheduler.backend.schedule.db.entity.TimeRange
         parentColumns = ["timetableId"],
         childColumns = ["timeRange"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    primaryKeys = ["weekday", "timeRange"]
 )
 data class Schedule(
-    @PrimaryKey(true) val scheduleId: Int = 0,
     @ColumnInfo("weekday") val weekday: Int,
     @ColumnInfo("timeRange") val timeRangeId: Int,
     @ColumnInfo("message") val msg: String
