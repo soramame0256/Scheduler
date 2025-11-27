@@ -19,45 +19,40 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
             runBlocking {
                 dao.getSchedulesWithTime()
             }
+    override fun getSchedules(): CompletableFuture<List<CombinedSchedule>> = CompletableFuture.supplyAsync {
+        runBlocking {
+            dao.getSchedulesWithTime()
         }
     }
 
-    override fun getSchedulesAtTime(time: Time): CompletableFuture<List<CombinedSchedule>> =
-        CompletableFuture.supplyAsync {
-            runBlocking {
-                dao.getSchedulesAtTime(time)
-            }
-        }
-
-    override fun insertSchedule(schedule: Schedule): CompletableFuture<Void> {
-        return CompletableFuture.runAsync {
-            runBlocking {
-                dao.insertSchedule(schedule)
-            }
+    override fun getSchedulesAtTime(time: Time): CompletableFuture<List<CombinedSchedule>> = CompletableFuture.supplyAsync {
+        runBlocking {
+            dao.getSchedulesAtTime(time)
         }
     }
 
-    override fun updateSchedule(schedule: Schedule): CompletableFuture<Void> {
-        return CompletableFuture.runAsync {
-            runBlocking {
-                dao.updateSchedule(schedule)
-            }
+    override fun insertSchedule(schedule: Schedule): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            dao.insertSchedule(schedule)
         }
     }
 
-    override fun getAllTimeRanges(): CompletableFuture<List<TimeRange>> {
-        return CompletableFuture.supplyAsync {
-            runBlocking {
-                dao.getAllTimeRanges()
-            }
+    override fun updateSchedule(schedule: Schedule): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            dao.updateSchedule(schedule)
         }
     }
 
-    override fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CompletableFuture<Result<Schedule>> {
-        return CompletableFuture.supplyAsync {
-            runBlocking {
-                dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
-            }
+    override fun getAllTimeRanges(): CompletableFuture<List<TimeRange>> = CompletableFuture.supplyAsync {
+        runBlocking {
+            dao.getAllTimeRanges()
+        }
+    }
+
+
+    override fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CompletableFuture<Result<Schedule>> = CompletableFuture.supplyAsync {
+        runBlocking {
+            dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
         }
     }
 }
