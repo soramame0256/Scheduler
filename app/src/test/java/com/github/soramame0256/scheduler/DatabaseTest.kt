@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.soramame0256.scheduler.backend.schedule.Time
+import com.github.soramame0256.scheduler.backend.schedule.Weekday
+import com.github.soramame0256.scheduler.backend.schedule.db.ScheduleModel
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.AppDatabase
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.ScheduleDao
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -41,18 +43,24 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun writeAndRead() {
-        runBlocking {
-            val timeRange = TimeRange(start = 0, end = 24)
-            val timeRange2 = TimeRange(start = 25, end = 128)
-            dao.insertTimeRange(timeRange)
-            dao.insertSchedule(Schedule(weekday = 0, timeRangeId = 1, msg = "test"))
-            dao.insertTimeRange(timeRange2)
-            dao.insertSchedule(Schedule(weekday = 0, timeRangeId = 2, msg = "aiueo"))
-            assertEquals(2, dao.getSchedulesWithTime().size)
-            assertEquals("test", dao.getSchedulesAtTime(0)[0].schedule.msg)
-            assertEquals(128, dao.getAllTimeRanges()[1].end)
-            assertEquals("aiueo", dao.getSchedulesAtTime(30)[0].schedule.msg)
-            assertEquals(24, dao.getAllTimeRanges()[0].end)
+        val timeRange = TimeRange(start = Time(0, 25), end = Time(1, 12))
+        val timeRange2 = TimeRange(start = Time(1,21), end = Time(2, 53))
+        val schedule = Schedule(Weekday.MONDAY, 1, "test")
+        val schedule2 = Schedule(Weekday.TUESDAY, 2, "test2")
+        val model = ScheduleModel(dao)
+        model.insertTimeRange(timeRange).thenCompose {
+            model.insertTimeRange(timeRange2)
+        }.thenCompose {
+            model.insertSchedule(schedule)
+        }.thenCompose {
+            model.insertSchedule(schedule2)
+        }.thenAccept {
+            assertEquals("test", model.getSchedulesAtTime(Time(0, 26)).get()[0].schedule.msg)
+            assertEquals("test2", model.getSchedulesAtTime(Time(1, 22)).get()[0].schedule.msg)
+            assertEquals("test", model.getScheduleAtTimeAndWeekday(Time(0, 26),Weekday.MONDAY).get().getOrThrow().msg)
+            assertEquals("test2", model.getScheduleAtTimeAndWeekday(Time(1, 22),Weekday.TUESDAY).get().getOrThrow().msg)
+            assertEquals(true, model.getScheduleAtTimeAndWeekday(Time(1, 22),Weekday.WEDNESDAY).get().isFailure)
+
         }
     }
 }
