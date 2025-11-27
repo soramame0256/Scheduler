@@ -13,6 +13,5 @@ import java.util.concurrent.CompletableFuture
 interface ScheduleReader {
     fun getSchedules(): CompletableFuture<List<CombinedSchedule>>
     fun getSchedulesAtTime(time: Time): CompletableFuture<List<CombinedSchedule>>
-    fun getAllTimeRanges(): CompletableFuture<List<TimeRange>>
     fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CompletableFuture<Result<Schedule>>
 }
