@@ -25,7 +25,7 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
     override fun getSchedulesAtTime(time: Time): CompletableFuture<List<CombinedSchedule>> =
         CompletableFuture.supplyAsync {
             runBlocking {
-                dao.getSchedulesAtTime(time.formattedInteger())
+                dao.getSchedulesAtTime(time)
             }
         }
 
@@ -56,7 +56,7 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
     override fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CompletableFuture<Result<Schedule>> {
         return CompletableFuture.supplyAsync {
             runBlocking {
-                dao.getSchedulesAtTimeAndWeekday(weekday.value, time.formattedInteger()).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
+                dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
             }
         }
     }
