@@ -30,4 +30,7 @@ interface ScheduleDao {
 
     @Update(entity = Schedule::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateSchedule(schedule: Schedule)
+
+    @Query("SELECT * FROM Schedule, TimeRange WHERE Schedule.weekday = :weekday and Schedule.timeRange = TimeRange.timetableId and TimeRange.start <= :time and TimeRange.`end` >= :time")
+    suspend fun getSchedulesAtTimeAndWeekday(weekday: Int, time: Int): List<CombinedSchedule>
 }
