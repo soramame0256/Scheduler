@@ -2,8 +2,10 @@ package com.github.soramame0256.scheduler.backend.schedule.db
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.github.soramame0256.scheduler.backend.schedule.db.entity.Schedule
 import com.github.soramame0256.scheduler.backend.schedule.db.entity.TimeRange
 import com.github.soramame0256.scheduler.backend.schedule.db.joinedentity.CombinedSchedule
@@ -25,4 +27,7 @@ interface ScheduleDao {
 
     @Insert(entity = TimeRange::class)
     suspend fun insertTimeRange(timeRange: TimeRange)
+
+    @Update(entity = Schedule::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateSchedule(schedule: Schedule)
 }
