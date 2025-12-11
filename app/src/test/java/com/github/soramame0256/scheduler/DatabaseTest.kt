@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.soramame0256.scheduler.backend.schedule.Time
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
-import com.github.soramame0256.scheduler.backend.schedule.db.ScheduleModel
+import com.github.soramame0256.scheduler.backend.schedule.db.ScheduleRepositoryImpl
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.AppDatabase
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.ScheduleDao
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
@@ -46,7 +46,7 @@ class DatabaseTest {
         val timeRangeToInsert = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
         val timeRange2ToInsert = TimeRange(start = Time(1, 21), endTime = Time(2, 53))
 
-        val model = ScheduleModel(dao)
+        val model = ScheduleRepositoryImpl(dao)
 
         val timeRangeId = model.insertTimeRange(timeRangeToInsert)
         val insertedTimeRange = timeRangeToInsert.copy(timetableId = timeRangeId)

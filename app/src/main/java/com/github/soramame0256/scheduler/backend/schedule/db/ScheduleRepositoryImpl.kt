@@ -12,7 +12,7 @@ import com.github.soramame0256.scheduler.backend.schedule.innerdb.joinedentity.C
  * daoの関数をコルーチンベースで扱いやすくラップして提供します。
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
-class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWriter, TimeRangeReader, TimeRangeWriter {
+class ScheduleRepositoryImpl(private val dao: ScheduleDao) : ScheduleRepository {
     override suspend fun getSchedules(): List<CombinedSchedule> = dao.getSchedulesWithTime()
 
     override suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule> = dao.getSchedulesAtTime(time)
