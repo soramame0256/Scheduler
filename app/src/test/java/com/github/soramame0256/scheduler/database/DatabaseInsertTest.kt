@@ -44,7 +44,6 @@ class DatabaseInsertTest {
         val timeRangeToInsert = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
         val timeRange2ToInsert = TimeRange(start = Time(1, 21), endTime = Time(2, 53))
         val timeRangeId = service.insertTimeRange(timeRangeToInsert)
-        val insertedTimeRange = timeRangeToInsert.copy(timetableId = timeRangeId)
         val timeRangeId2 = service.insertTimeRange(timeRange2ToInsert)
         val schedule = Schedule(Weekday.MONDAY, timeRangeId, "test")
         val schedule2 = Schedule(Weekday.TUESDAY, timeRangeId2, "test2")
