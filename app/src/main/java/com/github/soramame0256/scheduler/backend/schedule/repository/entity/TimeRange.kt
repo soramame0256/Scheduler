@@ -12,6 +12,7 @@ import com.github.soramame0256.scheduler.backend.schedule.Time
 data class TimeRange(
     @PrimaryKey(true) val timetableId: Long = 0,
     @ColumnInfo("start") val start: Time,
+    /** 期間の終了時刻（この時刻を含む) */
     @ColumnInfo("endTime") val endTime: Time
 ) {
     init {
