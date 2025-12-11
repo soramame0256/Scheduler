@@ -1,18 +1,18 @@
-package com.github.soramame0256.scheduler.backend.schedule.db
+package com.github.soramame0256.scheduler.backend.schedule.service
 
 import com.github.soramame0256.scheduler.backend.schedule.Time
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
 import com.github.soramame0256.scheduler.backend.schedule.exception.ScheduleNotFoundException
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.ScheduleDao
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.joinedentity.CombinedSchedule
+import com.github.soramame0256.scheduler.backend.schedule.repository.ScheduleDao
+import com.github.soramame0256.scheduler.backend.schedule.repository.entity.Schedule
+import com.github.soramame0256.scheduler.backend.schedule.repository.entity.TimeRange
+import com.github.soramame0256.scheduler.backend.schedule.repository.joinedentity.CombinedSchedule
 
 /**
  * daoの関数をコルーチンベースで扱いやすくラップして提供します。
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
-class ScheduleRepositoryImpl(private val dao: ScheduleDao) : ScheduleRepository {
+class ScheduleServiceImpl(private val dao: ScheduleDao) : ScheduleService {
     override suspend fun getSchedules(): List<CombinedSchedule> = dao.getSchedulesWithTime()
 
     override suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule> = dao.getSchedulesAtTime(time)

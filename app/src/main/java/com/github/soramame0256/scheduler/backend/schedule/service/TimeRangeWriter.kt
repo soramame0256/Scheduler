@@ -1,6 +1,6 @@
-package com.github.soramame0256.scheduler.backend.schedule.db
+package com.github.soramame0256.scheduler.backend.schedule.service
 
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
+import com.github.soramame0256.scheduler.backend.schedule.repository.entity.TimeRange
 
 interface TimeRangeWriter {
     suspend fun insertTimeRange(timeRange: TimeRange): Long

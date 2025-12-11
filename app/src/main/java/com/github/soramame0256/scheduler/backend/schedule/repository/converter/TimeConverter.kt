@@ -1,4 +1,4 @@
-package com.github.soramame0256.scheduler.backend.schedule.innerdb.converter
+package com.github.soramame0256.scheduler.backend.schedule.repository.converter
 
 import androidx.room.TypeConverter
 import com.github.soramame0256.scheduler.backend.schedule.Time

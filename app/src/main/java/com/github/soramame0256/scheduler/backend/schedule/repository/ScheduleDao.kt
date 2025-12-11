@@ -1,11 +1,11 @@
-package com.github.soramame0256.scheduler.backend.schedule.innerdb
+package com.github.soramame0256.scheduler.backend.schedule.repository
 
 import androidx.room.*
 import com.github.soramame0256.scheduler.backend.schedule.Time
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
-import com.github.soramame0256.scheduler.backend.schedule.innerdb.joinedentity.CombinedSchedule
+import com.github.soramame0256.scheduler.backend.schedule.repository.entity.Schedule
+import com.github.soramame0256.scheduler.backend.schedule.repository.entity.TimeRange
+import com.github.soramame0256.scheduler.backend.schedule.repository.joinedentity.CombinedSchedule
 
 @Dao
 interface ScheduleDao {

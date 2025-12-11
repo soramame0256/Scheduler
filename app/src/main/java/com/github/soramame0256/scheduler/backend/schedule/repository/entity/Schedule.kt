@@ -1,4 +1,4 @@
-package com.github.soramame0256.scheduler.backend.schedule.innerdb.entity
+package com.github.soramame0256.scheduler.backend.schedule.repository.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
