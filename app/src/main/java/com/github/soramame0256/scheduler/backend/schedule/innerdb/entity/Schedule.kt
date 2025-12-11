@@ -9,13 +9,13 @@ import com.github.soramame0256.scheduler.backend.schedule.Weekday
     foreignKeys = [ForeignKey(
         entity = TimeRange::class,
         parentColumns = ["timetableId"],
-        childColumns = ["timeRange"],
+        childColumns = ["timeRangeId"],
         onDelete = ForeignKey.CASCADE
     )],
-    primaryKeys = ["weekday", "timeRange"]
+    primaryKeys = ["weekday", "timeRangeId"]
 )
 data class Schedule(
     @ColumnInfo("weekday") val weekday: Weekday,
-    @ColumnInfo("timeRange") val timeRangeId: Long,
+    @ColumnInfo("timeRangeId") val timeRangeId: Long,
     @ColumnInfo("message") val msg: String
 )
