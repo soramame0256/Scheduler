@@ -59,9 +59,9 @@ dependencies {
     // See Add the KSP plugin to your project
     ksp("androidx.room:room-compiler:$roomVersion")
 
-    testImplementation("androidx.test.ext:junit-ktx:1.3.0")
-    testImplementation("androidx.test:runner:1.6.2")
-    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("androidx.test.ext:junit-ktx:1.1.5")
+    testImplementation("androidx.test:runner:1.5.2")
+    testImplementation("org.robolectric:robolectric:4.13")
     testImplementation("androidx.room:room-testing:$roomVersion")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
