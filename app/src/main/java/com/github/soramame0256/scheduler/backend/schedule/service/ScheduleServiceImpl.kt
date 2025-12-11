@@ -26,8 +26,12 @@ class ScheduleServiceImpl(private val dao: ScheduleDao) : ScheduleService {
     override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges()
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        return dao.getScheduleAtTimeAndWeekday(time,weekday)?.let { Result.success(it.schedule) }
-            ?: Result.failure(ScheduleNotFoundException())
+        val combinedSchedule = dao.getScheduleAtTimeAndWeekday(time, weekday)
+        return if (combinedSchedule != null) {
+            Result.success(combinedSchedule.schedule)
+        } else {
+            Result.failure(ScheduleNotFoundException())
+        }
     }
 
     override suspend fun insertTimeRange(timeRange: TimeRange): Long = dao.insertTimeRange(timeRange)
