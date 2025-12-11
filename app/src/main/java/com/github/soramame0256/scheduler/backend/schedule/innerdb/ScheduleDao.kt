@@ -34,8 +34,10 @@ interface ScheduleDao {
 
     @Delete
     suspend fun deleteSchedule(schedule: Schedule)
+
     @Delete
     suspend fun deleteTimeRange(timeRange: TimeRange)
+
     @Update
     suspend fun updateTimeRange(timeRange: TimeRange)
 }

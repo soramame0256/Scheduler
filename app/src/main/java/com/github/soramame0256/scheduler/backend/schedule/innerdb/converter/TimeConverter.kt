@@ -5,7 +5,8 @@ import com.github.soramame0256.scheduler.backend.schedule.Time
 
 class TimeConverter {
     @TypeConverter
-    fun toDbValue(t: Time) : Int? = t.formattedInteger()
+    fun toDbValue(t: Time): Int = t.formattedInteger()
+
     @TypeConverter
-    fun fromDbValue(i: Int?) : Time? = i?.let { Time(it / 100, it % 100) }
+    fun fromDbValue(i: Int?): Time? = i?.let { Time(it / 100, it % 100) }
 }
