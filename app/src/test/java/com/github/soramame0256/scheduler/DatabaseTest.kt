@@ -61,7 +61,7 @@ class DatabaseTest {
         model.insertSchedule(schedule2)
         
         assertEquals("test", model.getSchedulesAtTime(Time(0, 26)).firstOrNull()?.schedule?.msg)
-        assertEquals("test2", model.getSchedulesAtTime(Time(1, 22))[0].schedule.msg)
+        assertEquals("test2", model.getSchedulesAtTime(Time(1, 22)).firstOrNull()?.schedule?.msg)
         assertEquals("test", model.getScheduleAtTimeAndWeekday(Time(0, 26), Weekday.MONDAY).getOrThrow().msg)
         assertEquals("test2", model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.TUESDAY).getOrThrow().msg)
         assertEquals(true, model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.WEDNESDAY).isFailure)
