@@ -8,7 +8,7 @@ import com.github.soramame0256.scheduler.backend.schedule.Time
 /**
  * 時間枠を表すデータクラス
  */
-@Entity(tableName = "TimeRange")
+@Entity(tableName = "time_range")
 data class TimeRange(
     @PrimaryKey(true) val timetableId: Long = 0,
     @ColumnInfo("start") val start: Time,

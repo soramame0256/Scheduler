@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
 
 @Entity(
-    tableName = "Schedule",
+    tableName = "schedule",
     foreignKeys = [ForeignKey(
         entity = TimeRange::class,
         parentColumns = ["timetableId"],

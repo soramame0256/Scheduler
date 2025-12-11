@@ -10,14 +10,14 @@ import com.github.soramame0256.scheduler.backend.schedule.repository.joinedentit
 @Dao
 interface ScheduleDao {
     @Transaction
-    @Query("SELECT * FROM Schedule")
+    @Query("SELECT * FROM schedule")
     suspend fun getSchedulesWithTime(): List<CombinedSchedule>
 
-    @Query("SELECT * FROM TimeRange")
+    @Query("SELECT * FROM time_range")
     suspend fun getAllTimeRanges(): List<TimeRange>
 
     @Transaction
-    @Query("SELECT * FROM Schedule INNER JOIN TimeRange ON Schedule.timetableId = TimeRange.timetableId WHERE TimeRange.start <= :time and TimeRange.endTime >= :time ORDER BY TimeRange.start ASC")
+    @Query("SELECT * FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC")
     suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
     @Insert
@@ -30,7 +30,7 @@ interface ScheduleDao {
     suspend fun updateSchedule(schedule: Schedule)
 
     @Transaction
-    @Query("SELECT * FROM Schedule INNER JOIN TimeRange ON Schedule.timetableId = TimeRange.timetableId WHERE Schedule.weekday = :weekday and TimeRange.start <= :time and TimeRange.endTime >= :time ORDER BY TimeRange.start ASC LIMIT 1")
+    @Query("SELECT * FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE schedule.weekday = :weekday and time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC LIMIT 1")
     suspend fun getScheduleAtTimeAndWeekday(weekday: Weekday, time: Time): CombinedSchedule?
 
     @Delete
