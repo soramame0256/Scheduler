@@ -1,7 +1,7 @@
 package com.github.soramame0256.scheduler.service
 
-import com.github.soramame0256.scheduler.repository.entity.TimeRangeEntity
+import com.github.soramame0256.scheduler.domain.TimeRange
 
 interface TimeRangeReader {
-    suspend fun getAllTimeRanges(): List<TimeRangeEntity>
+    suspend fun getAllTimeRanges(): List<TimeRange>
 }
