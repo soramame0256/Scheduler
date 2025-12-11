@@ -16,6 +16,6 @@ data class TimeRange(
 ) {
     init {
         // validation
-        if (start > endTime) throw IllegalArgumentException("start must be less than end")
+        if (start > endTime) throw IllegalArgumentException("start must not be after end")
     }
 }
