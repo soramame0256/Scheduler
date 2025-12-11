@@ -42,6 +42,6 @@ interface ScheduleDao {
     suspend fun deleteSchedule(schedule: Schedule)
     @Delete
     suspend fun deleteTimeRange(timeRange: TimeRange)
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     suspend fun updateTimeRange(timeRange: TimeRange)
 }
