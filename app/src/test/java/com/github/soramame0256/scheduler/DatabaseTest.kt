@@ -65,8 +65,7 @@ class DatabaseTest {
         assertEquals("test", model.getScheduleAtTimeAndWeekday(Time(0, 26), Weekday.MONDAY).getOrThrow().msg)
         assertEquals("test2", model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.TUESDAY).getOrThrow().msg)
         assertEquals(true, model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.WEDNESDAY).isFailure)
-        
-        model.deleteSchedule(schedule)
+
         model.deleteTimeRange(timeRange)
         
         assertEquals(1, model.getAllTimeRanges().size)
