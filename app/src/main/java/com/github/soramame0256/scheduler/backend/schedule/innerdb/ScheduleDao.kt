@@ -27,10 +27,10 @@ interface ScheduleDao {
     suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
     @Insert
-    suspend fun insertSchedule(schedule: Schedule)
+    suspend fun insertSchedule(schedule: Schedule): Long
 
     @Insert
-    suspend fun insertTimeRange(timeRange: TimeRange)
+    suspend fun insertTimeRange(timeRange: TimeRange): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateSchedule(schedule: Schedule)

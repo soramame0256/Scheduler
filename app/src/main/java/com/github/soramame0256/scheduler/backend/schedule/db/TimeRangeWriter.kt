@@ -4,7 +4,7 @@ import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRan
 import java.util.concurrent.CompletableFuture
 
 interface TimeRangeWriter {
-    suspend fun insertTimeRange(timeRange: TimeRange)
+    suspend fun insertTimeRange(timeRange: TimeRange): Long
     suspend fun updateTimeRange(timeRange: TimeRange)
     suspend fun deleteTimeRange(timeRange: TimeRange)
 }
