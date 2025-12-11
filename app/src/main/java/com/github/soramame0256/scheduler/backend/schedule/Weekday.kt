@@ -8,5 +8,10 @@ enum class Weekday(val value: Int) {
     THURSDAY(4),
     FRIDAY(5),
     SATURDAY(6),
-    ERROR(-1)
+    ERROR(-1);
+
+    companion object {
+        private val map = entries.associateBy(Weekday::value)
+        fun fromValue(value: Int): Weekday? = map[value]
+    }
 }
