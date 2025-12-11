@@ -23,7 +23,7 @@ import java.io.IOException
 class DatabaseDeleteTest {
     private lateinit var db: AppDatabase
     private lateinit var service: ScheduleService
-    private var insertedTimeRange: TimeRange? = null
+    private lateinit var insertedTimeRange: TimeRange
 
     @Before
     fun setup() {
@@ -52,8 +52,7 @@ class DatabaseDeleteTest {
     }
     @Test
     fun delete() = runBlocking {
-        assert(insertedTimeRange != null)
-        service.deleteTimeRange(insertedTimeRange!!)
+        service.deleteTimeRange(insertedTimeRange)
 
         assertEquals(1, service.getAllTimeRanges().size)
         assertEquals(1, service.getSchedules().size)
