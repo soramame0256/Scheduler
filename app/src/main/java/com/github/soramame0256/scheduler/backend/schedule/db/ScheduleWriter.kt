@@ -9,4 +9,5 @@ import java.util.concurrent.CompletableFuture
 interface ScheduleWriter {
     fun insertSchedule(schedule: Schedule): CompletableFuture<Void>
     fun updateSchedule(schedule: Schedule): CompletableFuture<Void>
+    fun deleteSchedule(schedule: Schedule): CompletableFuture<Void>
 }

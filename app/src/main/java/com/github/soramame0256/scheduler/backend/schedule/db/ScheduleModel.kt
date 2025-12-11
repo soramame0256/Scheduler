@@ -38,6 +38,12 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
         }
     }
 
+    override fun deleteSchedule(schedule: Schedule): CompletableFuture<Void> = CompletableFuture.runAsync {
+        runBlocking {
+            dao.deleteSchedule(schedule)
+        }
+    }
+
     override fun getAllTimeRanges(): CompletableFuture<List<TimeRange>> = CompletableFuture.supplyAsync {
         runBlocking {
             dao.getAllTimeRanges()
@@ -59,15 +65,13 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
 
     override fun updateTimeRange(timeRange: TimeRange): CompletableFuture<Void> = CompletableFuture.runAsync {
         runBlocking {
-            //Todo: Daoに追加したらまた書く
-            TODO("Not yet implemented")
+            dao.updateTimeRange(timeRange)
         }
     }
 
     override fun deleteTimeRange(timeRange: TimeRange): CompletableFuture<Void> = CompletableFuture.runAsync {
         runBlocking {
-            //Todo: Daoに追加したらまた書く
-            TODO("Not yet implemented")
+            dao.deleteTimeRange(timeRange)
         }
     }
 
