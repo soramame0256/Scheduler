@@ -8,7 +8,7 @@ class WeekdayConverter {
     fun toDbValue(weekday: Weekday) : Int? = weekday.value
     @TypeConverter
     fun fromDbValue(i: Int?) : Weekday? = i?.let {
-        if (it < 0 || it >= Weekday.entries.size) throw IllegalStateException("データベースに無効な値が設定されています。: Weekday = " + i + "Except 0 <= i < " + Weekday.entries.size)
+        require(it in Weekday.entries.indices) { "データベースに無効な値が設定されています。: Weekday = $it. Expected 0 <= i < ${Weekday.entries.size}" }
         Weekday.entries[it]
     }
 }
