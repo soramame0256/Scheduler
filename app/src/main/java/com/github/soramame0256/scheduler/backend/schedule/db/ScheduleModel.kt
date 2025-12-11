@@ -9,7 +9,7 @@ import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRan
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.joinedentity.CombinedSchedule
 
 /**
- * daoの関数をCompletableFutureを使用したわかりやすいものに変換して返します。
+ * daoの関数をコルーチンベースで扱いやすくラップして提供します。
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
 class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWriter, TimeRangeReader, TimeRangeWriter {
