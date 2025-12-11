@@ -1,6 +1,6 @@
-package com.github.soramame0256.scheduler.backend.schedule.service
+package com.github.soramame0256.scheduler.service
 
-import com.github.soramame0256.scheduler.backend.schedule.repository.entity.Schedule
+import com.github.soramame0256.scheduler.repository.entity.Schedule
 
 /**
  * スケジュールの書き込み操作を定義するインターフェイスです。

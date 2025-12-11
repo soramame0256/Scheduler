@@ -1,12 +1,12 @@
-package com.github.soramame0256.scheduler.backend.schedule.service
+package com.github.soramame0256.scheduler.service
 
-import com.github.soramame0256.scheduler.backend.schedule.Time
-import com.github.soramame0256.scheduler.backend.schedule.Weekday
-import com.github.soramame0256.scheduler.backend.schedule.exception.ScheduleNotFoundException
-import com.github.soramame0256.scheduler.backend.schedule.repository.ScheduleDao
-import com.github.soramame0256.scheduler.backend.schedule.repository.entity.Schedule
-import com.github.soramame0256.scheduler.backend.schedule.repository.entity.TimeRange
-import com.github.soramame0256.scheduler.backend.schedule.repository.joinedentity.CombinedSchedule
+import com.github.soramame0256.scheduler.domain.Time
+import com.github.soramame0256.scheduler.domain.Weekday
+import com.github.soramame0256.scheduler.domain.exception.ScheduleNotFoundException
+import com.github.soramame0256.scheduler.repository.ScheduleDao
+import com.github.soramame0256.scheduler.repository.entity.Schedule
+import com.github.soramame0256.scheduler.repository.entity.TimeRange
+import com.github.soramame0256.scheduler.repository.joinedentity.CombinedSchedule
 
 /**
  * daoの関数をコルーチンベースで扱いやすくラップして提供します。

@@ -1,9 +1,9 @@
-package com.github.soramame0256.scheduler.backend.schedule.repository.converter
+package com.github.soramame0256.scheduler.repository.converter
 
 import android.util.Log
 import androidx.room.TypeConverter
 import com.github.soramame0256.scheduler.BuildConfig
-import com.github.soramame0256.scheduler.backend.schedule.Weekday
+import com.github.soramame0256.scheduler.domain.Weekday
 
 class WeekdayConverter {
 
@@ -15,7 +15,7 @@ class WeekdayConverter {
      */
     @TypeConverter
     fun fromDbValue(i: Int): Weekday {
-        return Weekday.fromValue(i) ?: run {
+        return Weekday.Companion.fromValue(i) ?: run {
             // weekdayが見つからなかった場合の処理
             if (BuildConfig.DEBUG) {
                 throw IllegalArgumentException("データベースに無効な値が設定されています。: Weekday = $i")

@@ -1,9 +1,9 @@
-package com.github.soramame0256.scheduler.backend.schedule.repository.entity
+package com.github.soramame0256.scheduler.repository.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import com.github.soramame0256.scheduler.backend.schedule.Weekday
+import com.github.soramame0256.scheduler.domain.Weekday
 
 @Entity(
     tableName = "schedule",

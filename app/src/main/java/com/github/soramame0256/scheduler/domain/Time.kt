@@ -1,4 +1,4 @@
-package com.github.soramame0256.scheduler.backend.schedule
+package com.github.soramame0256.scheduler.domain
 
 data class Time(val hour: Int, val minute: Int): Comparable<Time> {
     init {
