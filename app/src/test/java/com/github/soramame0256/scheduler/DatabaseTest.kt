@@ -43,18 +43,17 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun writeAndRead() = runBlocking {
-        var timeRange = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
-        var timeRange2 = TimeRange(start = Time(1, 21), endTime = Time(2, 53))
-        var schedule: Schedule
-        var schedule2: Schedule
+        val timeRangeToInsert = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
+        val timeRange2ToInsert = TimeRange(start = Time(1, 21), endTime = Time(2, 53))
+
         val model = ScheduleModel(dao)
 
-        val timeRangeId = model.insertTimeRange(timeRange)
-        timeRange = timeRange.copy(timetableId = timeRangeId)
-        val timeRangeId2 = model.insertTimeRange(timeRange2)
-        timeRange2 = timeRange2.copy(timetableId = timeRangeId2)
-        schedule = Schedule(Weekday.MONDAY, timeRangeId, "test")
-        schedule2 = Schedule(Weekday.TUESDAY, timeRangeId2, "test2")
+        val timeRangeId = model.insertTimeRange(timeRangeToInsert)
+        val insertedTimeRange = timeRangeToInsert.copy(timetableId = timeRangeId)
+        val timeRangeId2 = model.insertTimeRange(timeRange2ToInsert)
+        val insertedTimeRange2 = timeRange2ToInsert.copy(timetableId = timeRangeId2)
+        val schedule = Schedule(Weekday.MONDAY, timeRangeId, "test")
+        val schedule2 = Schedule(Weekday.TUESDAY, timeRangeId2, "test2")
 
         model.insertSchedule(schedule)
         model.insertSchedule(schedule2)
@@ -65,7 +64,7 @@ class DatabaseTest {
         assertEquals("test2", model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.TUESDAY).getOrThrow().msg)
         assertEquals(true, model.getScheduleAtTimeAndWeekday(Time(1, 22), Weekday.WEDNESDAY).isFailure)
 
-        model.deleteTimeRange(timeRange)
+        model.deleteTimeRange(insertedTimeRange)
         
         assertEquals(1, model.getAllTimeRanges().size)
         assertEquals(1, model.getSchedules().size)
