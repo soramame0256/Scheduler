@@ -31,7 +31,7 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE schedule.weekday = :weekday and time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC LIMIT 1")
-    suspend fun getScheduleAtTimeAndWeekday(weekday: Weekday, time: Time): CombinedSchedule?
+    suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CombinedSchedule?
 
     @Delete
     suspend fun deleteSchedule(schedule: Schedule)
