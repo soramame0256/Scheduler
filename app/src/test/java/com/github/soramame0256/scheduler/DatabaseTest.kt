@@ -66,6 +66,6 @@ class DatabaseTest {
         }.thenAccept {
             assertEquals(1, model.getAllTimeRanges().get().size)
             assertEquals(1, model.getSchedules().get().size)
-        }
+        }.join()
     }
 }
