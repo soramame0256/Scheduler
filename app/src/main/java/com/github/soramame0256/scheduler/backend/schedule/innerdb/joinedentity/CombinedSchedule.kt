@@ -7,5 +7,5 @@ import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRan
 
 data class CombinedSchedule(
     @Embedded val schedule: Schedule,
-    @Relation(parentColumn = "timeRange", entityColumn = "timetableId") val timeRange: TimeRange
+    @Relation(parentColumn = "timeRangeId", entityColumn = "timetableId") val timeRange: TimeRange
 )
