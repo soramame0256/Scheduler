@@ -8,5 +8,5 @@ enum class Weekday(val value: Int) {
     THURSDAY(4),
     FRIDAY(5),
     SATURDAY(6),
-    ERROR(999)
+    ERROR(-1)
 }
