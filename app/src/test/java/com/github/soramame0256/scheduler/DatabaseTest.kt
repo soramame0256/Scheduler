@@ -43,8 +43,8 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun writeAndRead() {
-        val timeRange = TimeRange(start = Time(0, 25), end = Time(1, 12))
-        val timeRange2 = TimeRange(start = Time(1,21), end = Time(2, 53))
+        val timeRange = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
+        val timeRange2 = TimeRange(start = Time(1,21), endTime = Time(2, 53))
         val schedule = Schedule(Weekday.MONDAY, 1, "test")
         val schedule2 = Schedule(Weekday.TUESDAY, 2, "test2")
         val model = ScheduleModel(dao)

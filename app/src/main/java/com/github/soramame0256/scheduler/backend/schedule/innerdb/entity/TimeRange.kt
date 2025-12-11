@@ -12,10 +12,10 @@ import com.github.soramame0256.scheduler.backend.schedule.Time
 data class TimeRange(
     @PrimaryKey(true) val timetableId: Int = 0,
     @ColumnInfo("start") val start: Time,
-    @ColumnInfo("end") val end: Time
+    @ColumnInfo("endTime") val endTime: Time
 ) {
     init {
         // validation
-        if (start.formattedInteger() > end.formattedInteger()) throw IllegalArgumentException("start must be less than end")
+        if (start.formattedInteger() > endTime.formattedInteger()) throw IllegalArgumentException("start must be less than end")
     }
 }
