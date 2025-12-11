@@ -12,7 +12,7 @@ class WeekdayConverter {
     fun fromDbValue(i: Int?): Weekday? = i?.let { value ->
         Weekday.entries.find { it.value == value }
             ?: run {
-                Log.d("WeekdayConverter","データベースに無効な値が設定されています。: Weekday = $value")
+                Log.e("WeekdayConverter","データベースに無効な値が設定されています。: Weekday = $value")
                 null
             }
     }
