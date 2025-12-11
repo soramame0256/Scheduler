@@ -51,11 +51,11 @@ class DatabaseTest {
         val model = ScheduleModel(dao)
 
         val timeRangeId = model.insertTimeRange(timeRange)
-        timeRange = timeRange.copy(timetableId = timeRangeId.toInt())
+        timeRange = timeRange.copy(timetableId = timeRangeId)
         val timeRangeId2 = model.insertTimeRange(timeRange2)
-        timeRange2 = timeRange2.copy(timetableId = timeRangeId2.toInt())
-        schedule = Schedule(Weekday.MONDAY, timeRangeId.toInt(), "test")
-        schedule2 = Schedule(Weekday.TUESDAY, timeRangeId2.toInt(), "test2")
+        timeRange2 = timeRange2.copy(timetableId = timeRangeId2)
+        schedule = Schedule(Weekday.MONDAY, timeRangeId, "test")
+        schedule2 = Schedule(Weekday.TUESDAY, timeRangeId2, "test2")
 
         model.insertSchedule(schedule)
         model.insertSchedule(schedule2)
