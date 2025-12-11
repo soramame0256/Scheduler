@@ -18,5 +18,5 @@ import com.github.soramame0256.scheduler.backend.schedule.Weekday
 data class Schedule(
     @ColumnInfo("weekday") val weekday: Weekday,
     @ColumnInfo("timeRangeId") val timeRangeId: Long,
-    @ColumnInfo("message") val msg: String
+    @ColumnInfo("message") val message: String
 )
