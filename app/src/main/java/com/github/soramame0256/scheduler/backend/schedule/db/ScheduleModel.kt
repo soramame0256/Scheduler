@@ -32,7 +32,7 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
 
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        return dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) }
+        return dao.getSchedulesAtTimeAndWeekday(weekday, time).firstOrNull()?.let { Result.success(it.schedule) }
             ?: Result.failure(ScheduleNotFoundException())
     }
 
