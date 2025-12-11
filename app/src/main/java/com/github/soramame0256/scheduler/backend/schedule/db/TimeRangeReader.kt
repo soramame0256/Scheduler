@@ -4,5 +4,5 @@ import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRan
 import java.util.concurrent.CompletableFuture
 
 interface TimeRangeReader {
-    fun getAllTimeRanges(): CompletableFuture<List<TimeRange>>
+    suspend fun getAllTimeRanges(): List<TimeRange>
 }

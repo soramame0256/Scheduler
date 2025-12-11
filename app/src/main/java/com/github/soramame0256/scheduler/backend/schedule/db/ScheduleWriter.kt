@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture
  * スケジュールの書き込み操作を定義するインターフェイスです。
  */
 interface ScheduleWriter {
-    fun insertSchedule(schedule: Schedule): CompletableFuture<Void>
-    fun updateSchedule(schedule: Schedule): CompletableFuture<Void>
-    fun deleteSchedule(schedule: Schedule): CompletableFuture<Void>
+    suspend fun insertSchedule(schedule: Schedule)
+    suspend fun updateSchedule(schedule: Schedule)
+    suspend fun deleteSchedule(schedule: Schedule)
 }
