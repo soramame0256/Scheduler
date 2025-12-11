@@ -2,21 +2,32 @@ package com.github.soramame0256.scheduler.backend.schedule.repository.converter
 
 import android.util.Log
 import androidx.room.TypeConverter
+import com.github.soramame0256.scheduler.BuildConfig
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
 
 class WeekdayConverter {
+
     @TypeConverter
     fun toDbValue(weekday: Weekday): Int = weekday.value
 
+    /*
+    基本的にエラーが起きた場合はDEBUGビルドの場合クラッシュ、リリースの場合回避値によるクラッシュ回避としています。
+     */
     @TypeConverter
     fun fromDbValue(i: Int?): Weekday {
-        val value = i ?: return Weekday.ERROR
+        val value = i ?: if (BuildConfig.DEBUG) {
+            throw IllegalArgumentException("iがnullです。")
+        } else return Weekday.ERROR
         val weekday = Weekday.entries.firstOrNull { it.value == value }
         if (weekday == null) {
-            Log.e("WeekdayConverter", "データベースに無効な値が設定されています。: Weekday = $value")
-            return Weekday.ERROR
+            // weekdayが見つからなかった場合の処理
+            if (BuildConfig.DEBUG) {
+                throw IllegalArgumentException("データベースに無効な値が設定されています。: Weekday = $value")
+            } else {
+                Log.e("WeekdayConverter", "データベースに無効な値が設定されています。: Weekday = $value")
+                return Weekday.ERROR
+            }
         }
         return weekday
-
     }
 }
