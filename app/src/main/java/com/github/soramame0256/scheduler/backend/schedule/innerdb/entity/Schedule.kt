@@ -18,5 +18,4 @@ data class Schedule(
     @ColumnInfo("weekday") val weekday: Weekday,
     @ColumnInfo("timeRange") val timeRangeId: Int,
     @ColumnInfo("message") val msg: String
-) {
-}
+)
