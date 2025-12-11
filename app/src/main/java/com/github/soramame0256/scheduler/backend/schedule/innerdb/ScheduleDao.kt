@@ -1,12 +1,6 @@
 package com.github.soramame0256.scheduler.backend.schedule.innerdb
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.*
 import com.github.soramame0256.scheduler.backend.schedule.Time
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
