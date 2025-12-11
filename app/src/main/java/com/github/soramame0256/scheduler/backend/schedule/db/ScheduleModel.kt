@@ -2,6 +2,7 @@ package com.github.soramame0256.scheduler.backend.schedule.db
 
 import com.github.soramame0256.scheduler.backend.schedule.Time
 import com.github.soramame0256.scheduler.backend.schedule.Weekday
+import com.github.soramame0256.scheduler.backend.schedule.exception.ScheduleNotFoundException
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.ScheduleDao
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.Schedule
 import com.github.soramame0256.scheduler.backend.schedule.innerdb.entity.TimeRange
@@ -31,7 +32,7 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
 
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        return dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(Exception("no schedule"))
+        return dao.getSchedulesAtTimeAndWeekday(weekday, time).getOrNull(0)?.let { Result.success(it.schedule) } ?: Result.failure(ScheduleNotFoundException())
     }
 
     override suspend fun insertTimeRange(timeRange: TimeRange): Long =
