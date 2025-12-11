@@ -22,25 +22,26 @@ interface ScheduleDao {
     @Query("SELECT * FROM TimeRange")
     suspend fun getAllTimeRanges(): List<TimeRange>
 
+    @Transaction
     @Query("SELECT * FROM Schedule, TimeRange WHERE TimeRange.start <= :time and TimeRange.endTime >= :time and Schedule.timeRange = TimeRange.timetableId")
     suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
-    @Insert(entity = Schedule::class)
+    @Insert
     suspend fun insertSchedule(schedule: Schedule)
 
-    @Insert(entity = TimeRange::class)
+    @Insert
     suspend fun insertTimeRange(timeRange: TimeRange)
 
-    @Update(entity = Schedule::class, onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateSchedule(schedule: Schedule)
 
     @Query("SELECT * FROM Schedule, TimeRange WHERE Schedule.weekday = :weekday and Schedule.timeRange = TimeRange.timetableId and TimeRange.start <= :time and TimeRange.endTime >= :time")
     suspend fun getSchedulesAtTimeAndWeekday(weekday: Weekday, time: Time): List<CombinedSchedule>
 
-    @Delete(entity = Schedule::class)
+    @Delete
     suspend fun deleteSchedule(schedule: Schedule)
-    @Delete(entity = TimeRange::class)
+    @Delete
     suspend fun deleteTimeRange(timeRange: TimeRange)
-    @Update(entity = TimeRange::class, onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTimeRange(timeRange: TimeRange)
 }
