@@ -40,7 +40,7 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 dependencies {
-    val roomVersion = "2.8.4"
+    val roomVersion = "2.6.1"
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
     implementation("androidx.activity:activity-compose:1.11.0")
@@ -52,6 +52,7 @@ dependencies {
 
 
     implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
     // See Add the KSP plugin to your project
