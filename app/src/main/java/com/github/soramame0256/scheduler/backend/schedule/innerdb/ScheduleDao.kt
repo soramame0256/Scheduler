@@ -32,7 +32,7 @@ interface ScheduleDao {
     @Insert
     suspend fun insertTimeRange(timeRange: TimeRange): Long
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     suspend fun updateSchedule(schedule: Schedule)
 
     @Query("SELECT * FROM Schedule, TimeRange WHERE Schedule.weekday = :weekday and Schedule.timeRange = TimeRange.timetableId and TimeRange.start <= :time and TimeRange.endTime >= :time")
