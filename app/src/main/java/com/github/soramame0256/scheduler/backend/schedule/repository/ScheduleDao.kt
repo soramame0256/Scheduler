@@ -17,7 +17,7 @@ interface ScheduleDao {
     suspend fun getAllTimeRanges(): List<TimeRange>
 
     @Transaction
-    @Query("SELECT * FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC")
+    @Query("SELECT schedule.* FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC")
     suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
     @Insert
@@ -30,7 +30,7 @@ interface ScheduleDao {
     suspend fun updateSchedule(schedule: Schedule)
 
     @Transaction
-    @Query("SELECT * FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE schedule.weekday = :weekday and time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC LIMIT 1")
+    @Query("SELECT schedule.* FROM schedule INNER JOIN time_range ON schedule.timetableId = time_range.timetableId WHERE schedule.weekday = :weekday and time_range.start <= :time and time_range.endTime >= :time ORDER BY time_range.start ASC LIMIT 1")
     suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): CombinedSchedule?
 
     @Delete
