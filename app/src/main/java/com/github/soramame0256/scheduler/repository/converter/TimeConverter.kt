@@ -1,7 +1,7 @@
-package com.github.soramame0256.scheduler.backend.schedule.repository.converter
+package com.github.soramame0256.scheduler.repository.converter
 
 import androidx.room.TypeConverter
-import com.github.soramame0256.scheduler.backend.schedule.Time
+import com.github.soramame0256.scheduler.domain.Time
 
 class TimeConverter {
     @TypeConverter

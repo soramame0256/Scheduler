@@ -1,9 +1,9 @@
-package com.github.soramame0256.scheduler.backend.schedule.repository.converter
+package com.github.soramame0256.scheduler.repository.converter
 
 import android.util.Log
 import androidx.room.TypeConverter
 import com.github.soramame0256.scheduler.BuildConfig
-import com.github.soramame0256.scheduler.backend.schedule.Weekday
+import com.github.soramame0256.scheduler.domain.Weekday
 
 class WeekdayConverter {
 

@@ -1,4 +1,4 @@
-package com.github.soramame0256.scheduler.backend.schedule
+package com.github.soramame0256.scheduler.domain
 
 enum class Weekday(val value: Int) {
     SUNDAY(0),
