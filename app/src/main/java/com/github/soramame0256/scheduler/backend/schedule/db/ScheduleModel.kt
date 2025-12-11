@@ -17,32 +17,22 @@ class ScheduleModel(private val dao: ScheduleDao) : ScheduleReader, ScheduleWrit
 
     override suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule> = dao.getSchedulesAtTime(time)
 
-    override suspend fun insertSchedule(schedule: Schedule): Long =
-        dao.insertSchedule(schedule)
+    override suspend fun insertSchedule(schedule: Schedule): Long = dao.insertSchedule(schedule)
 
-    override suspend fun updateSchedule(schedule: Schedule) =
-        dao.updateSchedule(schedule)
+    override suspend fun updateSchedule(schedule: Schedule) = dao.updateSchedule(schedule)
 
-
-    override suspend fun deleteSchedule(schedule: Schedule) =
-        dao.deleteSchedule(schedule)
-
+    override suspend fun deleteSchedule(schedule: Schedule) = dao.deleteSchedule(schedule)
 
     override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges()
-
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
         return dao.getSchedulesAtTimeAndWeekday(weekday, time)?.let { Result.success(it.schedule) }
             ?: Result.failure(ScheduleNotFoundException())
     }
 
-    override suspend fun insertTimeRange(timeRange: TimeRange): Long =
-        dao.insertTimeRange(timeRange)
+    override suspend fun insertTimeRange(timeRange: TimeRange): Long = dao.insertTimeRange(timeRange)
 
+    override suspend fun updateTimeRange(timeRange: TimeRange) = dao.updateTimeRange(timeRange)
 
-    override suspend fun updateTimeRange(timeRange: TimeRange) =
-        dao.updateTimeRange(timeRange)
-
-    override suspend fun deleteTimeRange(timeRange: TimeRange) =
-        dao.deleteTimeRange(timeRange)
+    override suspend fun deleteTimeRange(timeRange: TimeRange) = dao.deleteTimeRange(timeRange)
 }
