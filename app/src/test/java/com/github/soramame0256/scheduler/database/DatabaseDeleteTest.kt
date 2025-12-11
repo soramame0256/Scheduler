@@ -38,7 +38,7 @@ class DatabaseDeleteTest {
     fun closeDb() {
         db.close()
     }
-    fun insert() = runBlocking {
+    private fun insert() = runBlocking {
         val timeRangeToInsert = TimeRange(start = Time(0, 25), endTime = Time(1, 12))
         val timeRange2ToInsert = TimeRange(start = Time(1, 21), endTime = Time(2, 53))
         val timeRangeId = service.insertTimeRange(timeRangeToInsert)
