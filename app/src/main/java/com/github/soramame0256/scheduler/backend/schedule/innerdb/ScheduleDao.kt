@@ -1,6 +1,7 @@
 package com.github.soramame0256.scheduler.backend.schedule.innerdb
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -35,4 +36,11 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM Schedule, TimeRange WHERE Schedule.weekday = :weekday and Schedule.timeRange = TimeRange.timetableId and TimeRange.start <= :time and TimeRange.`end` >= :time")
     suspend fun getSchedulesAtTimeAndWeekday(weekday: Weekday, time: Time): List<CombinedSchedule>
+
+    @Delete(entity = Schedule::class)
+    suspend fun deleteSchedule(schedule: Schedule)
+    @Delete(entity = TimeRange::class)
+    suspend fun deleteTimeRange(timeRange: TimeRange)
+    @Update(entity = TimeRange::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateTimeRange(timeRange: TimeRange)
 }
