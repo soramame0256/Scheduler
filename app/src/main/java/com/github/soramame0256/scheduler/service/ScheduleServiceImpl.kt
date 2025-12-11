@@ -50,11 +50,11 @@ class ScheduleServiceImpl(private val dao: ScheduleDao) : ScheduleService {
      */
 
     private fun entityToTimeRange(timeRangeEntity: TimeRangeEntity) =
-        TimeRange(timeRangeEntity.timetableId, timeRangeEntity.start, timeRangeEntity.endTime)
+        TimeRange(id = timeRangeEntity.timetableId, startTime = timeRangeEntity.start, endTime = timeRangeEntity.endTime)
 
-    private fun timeRangeToEntity(timeRange: TimeRange) = TimeRangeEntity(timeRange.id, timeRange.startTime, timeRange.endTime)
+    private fun timeRangeToEntity(timeRange: TimeRange) = TimeRangeEntity(timetableId = timeRange.id, start = timeRange.startTime, endTime = timeRange.endTime)
 
-    private fun combinedEntityToSchedule(combinedSchedule: CombinedSchedule) = Schedule(combinedSchedule.schedule.weekday, entityToTimeRange(combinedSchedule.timeRange), combinedSchedule.schedule.message)
+    private fun combinedEntityToSchedule(combinedSchedule: CombinedSchedule) = Schedule(weekday = combinedSchedule.schedule.weekday, timeRange = entityToTimeRange(combinedSchedule.timeRange), message = combinedSchedule.schedule.message)
 
-    private fun scheduleToEntity(schedule: Schedule) = ScheduleEntity(schedule.weekday, schedule.timeRange.id, schedule.message)
+    private fun scheduleToEntity(schedule: Schedule) = ScheduleEntity(weekday = schedule.weekday, timetableId = schedule.timeRange.id, message = schedule.message)
 }
