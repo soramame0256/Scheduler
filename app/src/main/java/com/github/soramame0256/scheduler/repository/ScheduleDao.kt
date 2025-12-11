@@ -41,4 +41,7 @@ interface ScheduleDao {
 
     @Update
     suspend fun updateTimeRange(timeRange: TimeRangeEntity)
+
+    @Query("SELECT * FROM time_range WHERE timetableId = :id")
+    suspend fun getTimeRangeById(id: Long): TimeRangeEntity?
 }
