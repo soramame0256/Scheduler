@@ -36,7 +36,9 @@ android {
         compose = true
     }
 }
-
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
 dependencies {
     val roomVersion = "2.8.4"
     implementation("androidx.core:core-ktx:1.17.0")
