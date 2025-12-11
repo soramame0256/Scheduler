@@ -14,19 +14,13 @@ class WeekdayConverter {
     基本的にエラーが起きた場合はDEBUGビルドの場合クラッシュ、リリースの場合回避値によるクラッシュ回避としています。
      */
     @TypeConverter
-    fun fromDbValue(i: Int?): Weekday {
-        val value = i ?: if (BuildConfig.DEBUG) {
-            throw IllegalArgumentException("iがnullです。")
-        } else {
-            return Weekday.ERROR
-        }
-
-        return Weekday.fromValue(value) ?: run {
+    fun fromDbValue(i: Int): Weekday {
+        return Weekday.fromValue(i) ?: run {
             // weekdayが見つからなかった場合の処理
             if (BuildConfig.DEBUG) {
-                throw IllegalArgumentException("データベースに無効な値が設定されています。: Weekday = $value")
+                throw IllegalArgumentException("データベースに無効な値が設定されています。: Weekday = $i")
             } else {
-                Log.e("WeekdayConverter", "データベースに無効な値が設定されています。: Weekday = $value")
+                Log.e("WeekdayConverter", "データベースに無効な値が設定されています。: Weekday = $i")
                 Weekday.ERROR
             }
         }
