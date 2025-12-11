@@ -27,7 +27,6 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest {
     private lateinit var db: AppDatabase
-    private lateinit var db: AppDatabase
     private lateinit var dao: ScheduleDao
 
     @Before
