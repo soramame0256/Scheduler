@@ -23,7 +23,7 @@ interface ScheduleDao {
     suspend fun getAllTimeRanges(): List<TimeRange>
 
     @Transaction
-    @Query("SELECT * FROM Schedule, TimeRange WHERE TimeRange.start <= :time and TimeRange.endTime >= :time and Schedule.timeRange = TimeRange.timetableId")
+    @Query("SELECT * FROM Schedule INNER JOIN TimeRange ON Schedule.timeRange = TimeRange.timetableId WHERE TimeRange.start <= :time and TimeRange.endTime >= :time")
     suspend fun getSchedulesAtTime(time: Time): List<CombinedSchedule>
 
     @Insert
