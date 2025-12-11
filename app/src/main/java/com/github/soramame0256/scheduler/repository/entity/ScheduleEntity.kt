@@ -8,14 +8,14 @@ import com.github.soramame0256.scheduler.domain.Weekday
 @Entity(
     tableName = "schedule",
     foreignKeys = [ForeignKey(
-        entity = TimeRange::class,
+        entity = TimeRangeEntity::class,
         parentColumns = ["timetableId"],
         childColumns = ["timetableId"],
         onDelete = ForeignKey.CASCADE
     )],
     primaryKeys = ["weekday", "timetableId"]
 )
-data class Schedule(
+data class ScheduleEntity(
     @ColumnInfo("weekday") val weekday: Weekday,
     @ColumnInfo("timetableId") val timetableId: Long,
     @ColumnInfo("message") val message: String

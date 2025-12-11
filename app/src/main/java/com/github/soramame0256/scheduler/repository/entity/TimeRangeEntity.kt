@@ -9,7 +9,7 @@ import com.github.soramame0256.scheduler.domain.Time
  * 時間枠を表すデータクラス
  */
 @Entity(tableName = "time_range")
-data class TimeRange(
+data class TimeRangeEntity(
     @PrimaryKey(true) val timetableId: Long = 0,
     @ColumnInfo("start") val start: Time,
     /** 期間の終了時刻（この時刻を含む) */
