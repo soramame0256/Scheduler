@@ -6,11 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.soramame0256.scheduler.domain.Schedule
 import com.github.soramame0256.scheduler.domain.Time
-import com.github.soramame0256.scheduler.domain.TimeRange
 import com.github.soramame0256.scheduler.domain.Weekday
 import com.github.soramame0256.scheduler.repository.AppDatabase
-import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
-import com.github.soramame0256.scheduler.repository.entity.TimeRangeEntity
 import com.github.soramame0256.scheduler.service.ScheduleService
 import com.github.soramame0256.scheduler.service.ScheduleServiceImpl
 import kotlinx.coroutines.runBlocking
