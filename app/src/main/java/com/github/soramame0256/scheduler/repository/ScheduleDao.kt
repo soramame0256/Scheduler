@@ -1,6 +1,11 @@
 package com.github.soramame0256.scheduler.repository
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Transaction
+import androidx.room.Query
+import androidx.room.Delete
+import androidx.room.Update
+import androidx.room.Insert
 import com.github.soramame0256.scheduler.domain.Time
 import com.github.soramame0256.scheduler.domain.Weekday
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
