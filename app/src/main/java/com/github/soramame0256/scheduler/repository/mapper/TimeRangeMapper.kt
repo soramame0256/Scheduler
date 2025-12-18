@@ -1,6 +1,6 @@
 package com.github.soramame0256.scheduler.repository.mapper
 
-import com.github.soramame0256.scheduler.domain.TimeRange
+import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.repository.entity.TimeRangeEntity
 
 object TimeRangeMapper {

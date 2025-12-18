@@ -1,8 +1,8 @@
 package com.github.soramame0256.scheduler.service
 
-import com.github.soramame0256.scheduler.domain.Schedule
-import com.github.soramame0256.scheduler.domain.Time
-import com.github.soramame0256.scheduler.domain.Weekday
+import com.github.soramame0256.scheduler.model.Schedule
+import com.github.soramame0256.scheduler.model.Time
+import com.github.soramame0256.scheduler.model.Weekday
 
 /**
  * スケジュールの読み取り操作を定義するインターフェイスです。

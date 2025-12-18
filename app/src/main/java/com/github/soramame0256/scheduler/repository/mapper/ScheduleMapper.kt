@@ -1,6 +1,6 @@
 package com.github.soramame0256.scheduler.repository.mapper
 
-import com.github.soramame0256.scheduler.domain.Schedule
+import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
 import com.github.soramame0256.scheduler.repository.joinedentity.CombinedSchedule
 
