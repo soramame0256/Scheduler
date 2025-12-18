@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ScheduleMapperImpl @Inject constructor(
-    val timeRangeMapper: TimeRangeMapper
+    private val timeRangeMapper: TimeRangeMapper
 ) : ScheduleMapper {
     override fun toDomain(entity: CombinedSchedule) = Schedule(weekday = entity.schedule.weekday, timeRange = timeRangeMapper.toDomain(entity.timeRange), message = entity.schedule.message)
 
