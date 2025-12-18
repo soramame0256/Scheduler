@@ -1,4 +1,4 @@
-package com.github.soramame0256.scheduler.service.mapper
+package com.github.soramame0256.scheduler.repository.mapper
 
 import com.github.soramame0256.scheduler.domain.Schedule
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity

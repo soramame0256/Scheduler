@@ -6,9 +6,8 @@ import com.github.soramame0256.scheduler.domain.TimeRange
 import com.github.soramame0256.scheduler.domain.Weekday
 import com.github.soramame0256.scheduler.domain.exception.ScheduleNotFoundException
 import com.github.soramame0256.scheduler.repository.ScheduleDao
-import com.github.soramame0256.scheduler.service.mapper.TimeRangeMapper
-import com.github.soramame0256.scheduler.service.mapper.ScheduleMapper
-
+import com.github.soramame0256.scheduler.repository.mapper.TimeRangeMapper
+import com.github.soramame0256.scheduler.repository.mapper.ScheduleMapper
 /**
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
