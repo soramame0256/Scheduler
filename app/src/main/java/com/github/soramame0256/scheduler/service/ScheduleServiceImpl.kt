@@ -6,13 +6,19 @@ import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.model.exception.ScheduleNotFoundException
 import com.github.soramame0256.scheduler.repository.ScheduleDao
-import com.github.soramame0256.scheduler.repository.mapper.TimeRangeMapper
 import com.github.soramame0256.scheduler.repository.mapper.ScheduleMapper
+import com.github.soramame0256.scheduler.repository.mapper.TimeRangeMapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * このクラスはスケジュールの読み取りと書き込みの両方の操作を実装します。
  */
-class ScheduleServiceImpl(private val dao: ScheduleDao) : ScheduleService {
+
+@Singleton
+class ScheduleServiceImpl @Inject constructor(
+    private val dao: ScheduleDao
+) : ScheduleService {
     override suspend fun getSchedules(): List<Schedule> = dao.getSchedulesWithTime().map { ScheduleMapper.toDomain(it) }
 
     override suspend fun getSchedulesAtTime(time: Time): List<Schedule> = dao.getSchedulesAtTime(time).map { ScheduleMapper.toDomain(it) }
