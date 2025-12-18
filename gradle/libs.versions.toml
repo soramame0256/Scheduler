@@ -1,5 +1,5 @@
 [versions]
-hilt = "2.57.1"
+hilt = "2.57.2"
 
 [libraries]
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
