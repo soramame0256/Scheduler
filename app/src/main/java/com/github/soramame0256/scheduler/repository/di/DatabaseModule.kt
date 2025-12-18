@@ -3,6 +3,7 @@ package com.github.soramame0256.scheduler.repository.di
 import android.content.Context
 import androidx.room.Room
 import com.github.soramame0256.scheduler.repository.AppDatabase
+import com.github.soramame0256.scheduler.repository.ScheduleDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
