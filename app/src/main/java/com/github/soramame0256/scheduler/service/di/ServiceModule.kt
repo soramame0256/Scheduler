@@ -13,6 +13,5 @@ import javax.inject.Singleton
 abstract class ServiceModule {
 
     @Binds
-    @Singleton
     abstract fun bindScheduleService(scheduleServiceImpl: ScheduleServiceImpl): ScheduleService
 }

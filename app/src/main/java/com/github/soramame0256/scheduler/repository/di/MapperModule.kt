@@ -14,10 +14,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class MapperModule {
     @Binds
-    @Singleton
     abstract fun bindScheduleMapper(scheduleMapperImpl: ScheduleMapperImpl): ScheduleMapper
 
     @Binds
-    @Singleton
     abstract fun bindTimeRangeMapper(timeRangeMapperImpl: TimeRangeMapperImpl): TimeRangeMapper
 }
