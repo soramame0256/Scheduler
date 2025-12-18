@@ -4,8 +4,7 @@ import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
 import com.github.soramame0256.scheduler.repository.joinedentity.CombinedSchedule
 
-object ScheduleMapper {
-    fun toDomain(combinedSchedule: CombinedSchedule) = Schedule(weekday = combinedSchedule.schedule.weekday, timeRange = TimeRangeMapper.toDomain(combinedSchedule.timeRange), message = combinedSchedule.schedule.message)
-
-    fun toEntity(schedule: Schedule) = ScheduleEntity(weekday = schedule.weekday, timetableId = schedule.timeRange.id, message = schedule.message)
+interface ScheduleMapper {
+    fun toDomain(entity: CombinedSchedule): Schedule
+    fun toEntity(domain: Schedule): ScheduleEntity
 }

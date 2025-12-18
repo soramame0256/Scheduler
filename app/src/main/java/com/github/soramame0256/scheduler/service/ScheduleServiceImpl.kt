@@ -17,35 +17,37 @@ import javax.inject.Singleton
 
 @Singleton
 class ScheduleServiceImpl @Inject constructor(
-    private val dao: ScheduleDao
+    private val dao: ScheduleDao,
+    private val scheduleMapper: ScheduleMapper,
+    private val timeRangeMapper: TimeRangeMapper
 ) : ScheduleService {
-    override suspend fun getSchedules(): List<Schedule> = dao.getSchedulesWithTime().map { ScheduleMapper.toDomain(it) }
+    override suspend fun getSchedules(): List<Schedule> = dao.getSchedulesWithTime().map { scheduleMapper.toDomain(it) }
 
-    override suspend fun getSchedulesAtTime(time: Time): List<Schedule> = dao.getSchedulesAtTime(time).map { ScheduleMapper.toDomain(it) }
+    override suspend fun getSchedulesAtTime(time: Time): List<Schedule> = dao.getSchedulesAtTime(time).map { scheduleMapper.toDomain(it) }
 
-    override suspend fun insertSchedule(schedule: Schedule): Long = dao.insertSchedule(ScheduleMapper.toEntity(schedule))
+    override suspend fun insertSchedule(schedule: Schedule): Long = dao.insertSchedule(scheduleMapper.toEntity(schedule))
 
-    override suspend fun updateSchedule(schedule: Schedule) = dao.updateSchedule(ScheduleMapper.toEntity(schedule))
+    override suspend fun updateSchedule(schedule: Schedule) = dao.updateSchedule(scheduleMapper.toEntity(schedule))
 
-    override suspend fun deleteSchedule(schedule: Schedule) = dao.deleteSchedule(ScheduleMapper.toEntity(schedule))
+    override suspend fun deleteSchedule(schedule: Schedule) = dao.deleteSchedule(scheduleMapper.toEntity(schedule))
 
-    override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges().map { TimeRangeMapper.toDomain(it) }
+    override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges().map { timeRangeMapper.toDomain(it) }
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
         val schedule = dao.getScheduleAtTimeAndWeekday(time, weekday)
         return if (schedule != null) {
-            Result.success(ScheduleMapper.toDomain(schedule))
+            Result.success(scheduleMapper.toDomain(schedule))
         } else {
             Result.failure(ScheduleNotFoundException())
         }
     }
 
     override suspend fun insertTimeRange(startTime: Time, endTime: Time): TimeRange {
-        val id = dao.insertTimeRange(TimeRangeMapper.toEntity(TimeRange(startTime = startTime, endTime = endTime)))
+        val id = dao.insertTimeRange(timeRangeMapper.toEntity(TimeRange(startTime = startTime, endTime = endTime)))
         return TimeRange(id, startTime, endTime)
     }
 
-    override suspend fun updateTimeRange(timeRange: TimeRange) = dao.updateTimeRange(TimeRangeMapper.toEntity(timeRange))
+    override suspend fun updateTimeRange(timeRange: TimeRange) = dao.updateTimeRange(timeRangeMapper.toEntity(timeRange))
 
-    override suspend fun deleteTimeRange(timeRange: TimeRange) = dao.deleteTimeRange(TimeRangeMapper.toEntity(timeRange))
+    override suspend fun deleteTimeRange(timeRange: TimeRange) = dao.deleteTimeRange(timeRangeMapper.toEntity(timeRange))
 }

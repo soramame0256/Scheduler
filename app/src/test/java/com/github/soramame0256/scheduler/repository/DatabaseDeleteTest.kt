@@ -8,6 +8,8 @@ import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.model.Weekday
+import com.github.soramame0256.scheduler.repository.mapper.ScheduleMapperImpl
+import com.github.soramame0256.scheduler.repository.mapper.TimeRangeMapperImpl
 import com.github.soramame0256.scheduler.service.ScheduleService
 import com.github.soramame0256.scheduler.service.ScheduleServiceImpl
 import kotlinx.coroutines.runBlocking
@@ -29,7 +31,9 @@ class DatabaseDeleteTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         val dao = db.scheduleDao()
-        service = ScheduleServiceImpl(dao)
+        val timeRangeMapper = TimeRangeMapperImpl()
+        val scheduleMapper = ScheduleMapperImpl(timeRangeMapper)
+        service = ScheduleServiceImpl(dao,scheduleMapper,timeRangeMapper)
         insert()
     }
     @After
