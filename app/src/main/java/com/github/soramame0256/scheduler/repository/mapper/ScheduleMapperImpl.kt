@@ -10,7 +10,15 @@ import javax.inject.Singleton
 class ScheduleMapperImpl @Inject constructor(
     private val timeRangeMapper: TimeRangeMapper
 ) : ScheduleMapper {
-    override fun toDomain(entity: CombinedSchedule) = Schedule(weekday = entity.schedule.weekday, timeRange = timeRangeMapper.toDomain(entity.timeRange), message = entity.schedule.message)
+    override fun toDomain(entity: CombinedSchedule) = Schedule(
+        weekday = entity.schedule.weekday,
+        timeRange = timeRangeMapper.toDomain(entity.timeRange),
+        message = entity.schedule.message
+    )
 
-    override fun toEntity(domain: Schedule) = ScheduleEntity(weekday = domain.weekday, timetableId = domain.timeRange.id, message = domain.message)
+    override fun toEntity(domain: Schedule) = ScheduleEntity(
+        weekday = domain.weekday,
+        timetableId = domain.timeRange.id,
+        message = domain.message
+    )
 }

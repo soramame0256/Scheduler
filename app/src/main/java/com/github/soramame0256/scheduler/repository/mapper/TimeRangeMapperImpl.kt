@@ -7,9 +7,15 @@ import javax.inject.Singleton
 
 @Singleton
 class TimeRangeMapperImpl @Inject constructor() : TimeRangeMapper {
-    override fun toDomain(entity: TimeRangeEntity): TimeRange =
-        TimeRange(id = entity.timetableId, startTime = entity.start, endTime = entity.endTime)
+    override fun toDomain(entity: TimeRangeEntity): TimeRange = TimeRange(
+        id = entity.timetableId,
+        startTime = entity.start,
+        endTime = entity.endTime
+    )
 
-    override fun toEntity(domain: TimeRange): TimeRangeEntity =
-        TimeRangeEntity(timetableId = domain.id, start = domain.startTime, endTime = domain.endTime)
+    override fun toEntity(domain: TimeRange): TimeRangeEntity = TimeRangeEntity(
+        timetableId = domain.id,
+        start = domain.startTime,
+        endTime = domain.endTime
+    )
 }
