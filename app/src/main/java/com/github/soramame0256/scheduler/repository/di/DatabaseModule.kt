@@ -26,5 +26,5 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideScheduleDao(database: AppDatabase) = database.scheduleDao()
+    fun provideScheduleDao(database: AppDatabase): ScheduleDao = database.scheduleDao()
 }
