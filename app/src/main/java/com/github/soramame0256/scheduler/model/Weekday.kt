@@ -12,6 +12,6 @@ enum class Weekday(val value: Int) {
 
     companion object {
         private val map = entries.associateBy(Weekday::value)
-        fun fromValue(value: Int): Weekday? = map[value]
+        fun fromValue(value: Int): Weekday = map[value] ?: ERROR
     }
 }
