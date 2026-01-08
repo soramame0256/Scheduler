@@ -37,6 +37,5 @@ class ScheduleWidget : AppWidgetProvider() {
             views.setTextViewText(R.id.appwidget_text2, message)
             appWidgetManager?.updateAppWidget(appWidgetId, views)
         }
-
     }
 }
