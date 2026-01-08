@@ -6,8 +6,8 @@ import androidx.room.Query
 import androidx.room.Delete
 import androidx.room.Update
 import androidx.room.Insert
-import com.github.soramame0256.scheduler.domain.Time
-import com.github.soramame0256.scheduler.domain.Weekday
+import com.github.soramame0256.scheduler.model.Time
+import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
 import com.github.soramame0256.scheduler.repository.entity.TimeRangeEntity
 import com.github.soramame0256.scheduler.repository.joinedentity.CombinedSchedule

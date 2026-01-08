@@ -1,16 +1,9 @@
-package com.github.soramame0256.scheduler.database
+package com.github.soramame0256.scheduler.repository
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.soramame0256.scheduler.domain.Schedule
-import com.github.soramame0256.scheduler.domain.Time
-import com.github.soramame0256.scheduler.domain.Weekday
-import com.github.soramame0256.scheduler.domain.TimeRange
-import com.github.soramame0256.scheduler.repository.AppDatabase
-import com.github.soramame0256.scheduler.service.ScheduleService
-import com.github.soramame0256.scheduler.service.ScheduleServiceImpl
+import com.github.soramame0256.scheduler.model.Schedule
+import com.github.soramame0256.scheduler.model.Time
+import com.github.soramame0256.scheduler.model.Weekday
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -20,16 +13,10 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class DatabaseReadTest {
-    private lateinit var db: AppDatabase
-    private lateinit var service: ScheduleService
-
+class DatabaseReadTest: DatabaseTestBase() {
     @Before
-    fun setup() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        val dao = db.scheduleDao()
-        service = ScheduleServiceImpl(dao)
+    override fun setup() {
+        super.setup()
         insert()
     }
     @After

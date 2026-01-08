@@ -3,7 +3,7 @@ package com.github.soramame0256.scheduler.repository.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import com.github.soramame0256.scheduler.domain.Weekday
+import com.github.soramame0256.scheduler.model.Weekday
 
 @Entity(
     tableName = "schedule",

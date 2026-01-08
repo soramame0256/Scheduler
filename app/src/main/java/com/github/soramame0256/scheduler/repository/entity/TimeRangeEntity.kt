@@ -3,7 +3,7 @@ package com.github.soramame0256.scheduler.repository.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.soramame0256.scheduler.domain.Time
+import com.github.soramame0256.scheduler.model.Time
 
 /**
  * 時間枠を表すデータクラス
