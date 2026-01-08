@@ -16,7 +16,9 @@ open class DatabaseTestBase {
     @Before
     open fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
         val dao = db.scheduleDao()
         val timeRangeMapper = TimeRangeMapperImpl()
         val scheduleMapper = ScheduleMapperImpl(timeRangeMapper)
