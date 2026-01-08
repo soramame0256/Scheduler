@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:theme="@style/Theme.Scheduler.AppWidgetContainer"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:visibility="visible" android:alpha="255"
+              android:background="@drawable/widget_background" android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/appwidget_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/appwidget_text"
+            android:textSize="20sp"
+            android:contentDescription="@string/appwidget_text"
+            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            android:background="@drawable/widget_background"
+            android:clipToOutline="true" android:textColor="@color/white"
+            android:textAppearance="@android:style/TextAppearance.Material.Display1" android:textStyle="normal"
+            android:textAlignment="center" android:textAllCaps="false"
+            android:visibility="visible"/>
+    <TextView
+            android:id="@+id/appwidget_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/appwidget_text"
+            android:textSize="20sp"
+            android:contentDescription="@string/appwidget_text"
+            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            android:background="@drawable/widget_background"
+            android:clipToOutline="true" android:textColor="@color/white"
+            android:textAppearance="@android:style/TextAppearance.Material.Display1" android:textStyle="normal"
+            android:textAlignment="center" android:textAllCaps="false"
+            android:visibility="visible"/>
+</LinearLayout>
