@@ -8,25 +8,24 @@
             android:id="@+id/appwidget_text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/appwidget_text"
-            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/appwidget_text"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
-            android:clipToOutline="true" android:textColor="@color/white"
-            android:textAppearance="@android:style/TextAppearance.Material.Display1" android:textStyle="normal"
-            android:textAlignment="center" android:textAllCaps="false"
-            android:visibility="visible"/>
+            android:text="@string/appwidget_text"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
     <TextView
             android:id="@+id/appwidget_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/appwidget_text"
-            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/appwidget_text"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
-            android:clipToOutline="true" android:textColor="@color/white"
-            android:textAppearance="@android:style/TextAppearance.Material.Display1" android:textStyle="normal"
-            android:textAlignment="center" android:textAllCaps="false"
-            android:visibility="visible"/>
+            android:text="@string/appwidget_text"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:visibility="gone"/>
     <!-- TODO: This TextView (appwidget_text) is currently unused but will be used in a future update to display the next schedule. -->
 </LinearLayout>
