@@ -35,7 +35,7 @@ class ScheduleWidget : AppWidgetProvider() {
         }
     }
     private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-        val cal = Calendar.getInstance()
+        val cal = Calendar.getInstance(Locale.ROOT)
         val hour = cal.get(Calendar.HOUR_OF_DAY)
         val minute = cal.get(Calendar.MINUTE)
         val time = Time(hour, minute)
