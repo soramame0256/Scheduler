@@ -6,6 +6,7 @@ import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.model.exception.ScheduleNotFoundException
 import com.github.soramame0256.scheduler.repository.ScheduleDao
+import com.github.soramame0256.scheduler.repository.joinedentity.CombinedSchedule
 import com.github.soramame0256.scheduler.repository.mapper.ScheduleMapper
 import com.github.soramame0256.scheduler.repository.mapper.TimeRangeMapper
 import javax.inject.Inject
@@ -34,12 +35,12 @@ class ScheduleServiceImpl @Inject constructor(
     override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges().map { timeRangeMapper.toDomain(it) }
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        val schedule = dao.getScheduleAtTimeAndWeekday(time, weekday)
-        return if (schedule != null) {
-            Result.success(scheduleMapper.toDomain(schedule))
-        } else {
-            Result.failure(ScheduleNotFoundException())
-        }
+        return dao.getScheduleAtTimeAndWeekday(time, weekday).toScheduleResult()
+    }
+
+    override suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
+        return dao.getNextScheduleAtTimeAndWeekday(time, weekday).toScheduleResult()
+
     }
 
     override suspend fun insertTimeRange(startTime: Time, endTime: Time): TimeRange {
@@ -50,4 +51,9 @@ class ScheduleServiceImpl @Inject constructor(
     override suspend fun updateTimeRange(timeRange: TimeRange) = dao.updateTimeRange(timeRangeMapper.toEntity(timeRange))
 
     override suspend fun deleteTimeRange(timeRange: TimeRange) = dao.deleteTimeRange(timeRangeMapper.toEntity(timeRange))
+
+    private fun CombinedSchedule?.toScheduleResult(): Result<Schedule> {
+        return this?.let { Result.success(scheduleMapper.toDomain(it)) }
+            ?: Result.failure(ScheduleNotFoundException())
+    }
 }
