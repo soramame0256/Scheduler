@@ -44,7 +44,7 @@ class ScheduleWidget : AppWidgetProvider() {
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
         val message = schedule.fold(
             onSuccess = { it.message },
-            onFailure = { "現在の予定はありません。" }
+            onFailure = { context.getString(R.string.no_schedule) }
         )
         views.setTextViewText(R.id.appwidget_text2, message)
         appWidgetManager?.updateAppWidget(appWidgetId, views)
