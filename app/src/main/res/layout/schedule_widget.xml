@@ -6,26 +6,13 @@
 
     <TextView
             android:id="@+id/appwidget_text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/appwidget_text"
-            android:text="@string/appwidget_text"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
+            style="@style/Widget.Scheduler.TextView"
+            android:text="@string/appwidget_text" />
+
     <TextView
             android:id="@+id/appwidget_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/appwidget_text"
+            style="@style/Widget.Scheduler.TextView"
             android:text="@string/appwidget_text"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     <!-- TODO: This TextView (appwidget_text) is currently unused but will be used in a future update to display the next schedule. -->
 </LinearLayout>
