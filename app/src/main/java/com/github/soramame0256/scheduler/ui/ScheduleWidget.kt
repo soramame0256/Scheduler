@@ -10,7 +10,13 @@ import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
 import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
