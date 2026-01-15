@@ -35,7 +35,6 @@ class ScheduleWidget : AppWidgetProvider() {
         }
     }
     private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-        context ?: return
         val cal = Calendar.getInstance()
         val hour = cal.get(Calendar.HOUR_OF_DAY)
         val minute = cal.get(Calendar.MINUTE)
@@ -48,6 +47,6 @@ class ScheduleWidget : AppWidgetProvider() {
             onFailure = { context.getString(R.string.no_schedule) }
         )
         views.setTextViewText(R.id.appwidget_text2, message)
-        appWidgetManager?.updateAppWidget(appWidgetId, views)
+        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 }
