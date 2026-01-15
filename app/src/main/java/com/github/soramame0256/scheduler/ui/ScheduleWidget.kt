@@ -13,6 +13,8 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -29,7 +31,7 @@ class ScheduleWidget : AppWidgetProvider() {
         val pendingResult = goAsync()
         coroutineScope.launch {
             try {
-                appWidgetIds.forEach { id -> updateAppWidget(context, appWidgetManager, service, id) }
+                appWidgetIds.map { id -> async { updateAppWidget(context, appWidgetManager, service, id) } }.awaitAll()
             } finally {
                 pendingResult.finish()
             }
