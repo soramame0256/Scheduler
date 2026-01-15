@@ -41,7 +41,7 @@ class ScheduleWidget : AppWidgetProvider() {
         val now = ZonedDateTime.now(ZoneId.systemDefault())
         val hour = now.hour
         val minute = now.minute
-        val weekday = Weekday.fromValue(now.dayOfWeek.value % 7)
+        val weekday = Weekday.from(now.dayOfWeek)
         val time = Time(hour, minute)
         val schedule = service.getScheduleAtTimeAndWeekday(time, weekday)
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)

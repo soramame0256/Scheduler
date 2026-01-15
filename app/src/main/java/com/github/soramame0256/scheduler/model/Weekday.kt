@@ -2,6 +2,7 @@ package com.github.soramame0256.scheduler.model
 
 import android.util.Log
 import com.github.soramame0256.scheduler.BuildConfig
+import java.time.DayOfWeek
 
 enum class Weekday(val value: Int) {
     SUNDAY(0),
@@ -22,5 +23,6 @@ enum class Weekday(val value: Int) {
                 ERROR
             }
         }
+        fun from(dayOfWeek: DayOfWeek) = fromValue(dayOfWeek.value % 7)
     }
 }
