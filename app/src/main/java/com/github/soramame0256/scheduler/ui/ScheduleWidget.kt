@@ -11,6 +11,7 @@ import com.github.soramame0256.scheduler.service.ScheduleService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -19,12 +20,13 @@ import javax.inject.Inject
 class ScheduleWidget : AppWidgetProvider() {
     @Inject
     lateinit var service: ScheduleService
-    override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
-        appWidgetIds?: return
+
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // そのままrunBlockingで処理するとメインスレッドが死ぬのでAppWidgetProvider.goAsync
         // を使用してBroadcastReceiverを延長してからCoroutineで処理
         val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch {
+        coroutineScope.launch {
             try {
                 appWidgetIds.forEach { id -> updateAppWidget(context, appWidgetManager, id) }
             } finally {
@@ -32,7 +34,7 @@ class ScheduleWidget : AppWidgetProvider() {
             }
         }
     }
-    private suspend fun updateAppWidget(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int) {
+    private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         context ?: return
         val cal = Calendar.getInstance()
         val hour = cal.get(Calendar.HOUR_OF_DAY)
