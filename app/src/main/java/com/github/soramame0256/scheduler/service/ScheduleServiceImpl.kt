@@ -42,6 +42,19 @@ class ScheduleServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
+        val timeRanges = getAllTimeRanges()
+            .sortedBy { it.startTime }
+            .filter { it.startTime > time }
+        var result: Result<Schedule>
+        for (range in timeRanges) {
+            result = getScheduleAtTimeAndWeekday(range.startTime, weekday)
+            if (result.isSuccess) return result
+        }
+        return Result.failure(ScheduleNotFoundException())
+
+    }
+
     override suspend fun insertTimeRange(startTime: Time, endTime: Time): TimeRange {
         val id = dao.insertTimeRange(timeRangeMapper.toEntity(TimeRange(startTime = startTime, endTime = endTime)))
         return TimeRange(id, startTime, endTime)

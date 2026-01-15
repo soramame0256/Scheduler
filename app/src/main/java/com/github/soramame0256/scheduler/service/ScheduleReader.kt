@@ -11,4 +11,5 @@ interface ScheduleReader {
     suspend fun getSchedules(): List<Schedule>
     suspend fun getSchedulesAtTime(time: Time): List<Schedule>
     suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule>
+    suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule>
 }
