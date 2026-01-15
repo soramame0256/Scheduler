@@ -14,7 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class ScheduleWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -35,11 +36,11 @@ class ScheduleWidget : AppWidgetProvider() {
         }
     }
     private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, service: ScheduleService, appWidgetId: Int) {
-        val cal = Calendar.getInstance(Locale.ROOT)
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
+        val now = ZonedDateTime.now(ZoneId.systemDefault())
+        val hour = now.hour
+        val minute = now.minute
+        val weekday = Weekday.fromValue(now.dayOfWeek.value % 7)
         val time = Time(hour, minute)
-        val weekday = Weekday.fromValue(cal.get(Calendar.DAY_OF_WEEK) - 1)
         val schedule = service.getScheduleAtTimeAndWeekday(time, weekday)
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
         val message = schedule.fold(
