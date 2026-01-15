@@ -17,8 +17,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class ScheduleWidget : AppWidgetProvider() {
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         val hiltEntryPoint = EntryPointAccessors.fromApplication(
             context.applicationContext,
@@ -50,5 +48,8 @@ class ScheduleWidget : AppWidgetProvider() {
         )
         views.setTextViewText(R.id.appwidget_text2, message)
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+    companion object {
+        private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 }
