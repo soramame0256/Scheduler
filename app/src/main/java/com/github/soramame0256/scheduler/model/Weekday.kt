@@ -18,7 +18,7 @@ enum class Weekday(val value: Int) {
         fun fromValue(value: Int): Weekday = map[value] ?: when {
             BuildConfig.DEBUG -> throw IllegalArgumentException("Invalid Weekday value: $value")
             else -> {
-                Log.e("Weekday", "不明な値が入力されました: value = $value")
+                Log.e("Weekday", "Invalid value was entered: value = $value")
                 ERROR
             }
         }
