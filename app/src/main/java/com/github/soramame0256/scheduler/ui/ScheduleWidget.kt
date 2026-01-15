@@ -8,33 +8,35 @@ import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
-import dagger.hilt.android.AndroidEntryPoint
+import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class ScheduleWidget : AppWidgetProvider() {
-    @Inject
-    lateinit var service: ScheduleService
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        val hiltEntryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            ScheduleWidgetEntryPoint::class.java
+        )
+        val service = hiltEntryPoint.scheduleService()
         // そのままrunBlockingで処理するとメインスレッドが死ぬのでAppWidgetProvider.goAsync
         // を使用してBroadcastReceiverを延長してからCoroutineで処理
         val pendingResult = goAsync()
         coroutineScope.launch {
             try {
-                appWidgetIds.forEach { id -> updateAppWidget(context, appWidgetManager, id) }
+                appWidgetIds.forEach { id -> updateAppWidget(context, appWidgetManager, service, id) }
             } finally {
                 pendingResult.finish()
             }
         }
     }
-    private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+    private suspend fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, service: ScheduleService, appWidgetId: Int) {
         val cal = Calendar.getInstance(Locale.ROOT)
         val hour = cal.get(Calendar.HOUR_OF_DAY)
         val minute = cal.get(Calendar.MINUTE)
