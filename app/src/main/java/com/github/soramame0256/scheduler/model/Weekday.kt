@@ -15,9 +15,12 @@ enum class Weekday(val value: Int) {
 
     companion object {
         private val map = entries.associateBy(Weekday::value)
-        fun fromValue(value: Int): Weekday = map[value] ?: if (BuildConfig.DEBUG) throw IllegalArgumentException("Invalid Weekday value: $value") else run {
-            Log.e("Weekday", "不明な値が入力されました: value = $value")
-            ERROR
+        fun fromValue(value: Int): Weekday = map[value] ?: when {
+            BuildConfig.DEBUG -> throw IllegalArgumentException("Invalid Weekday value: $value")
+            else -> {
+                Log.e("Weekday", "不明な値が入力されました: value = $value")
+                ERROR
+            }
         }
     }
 }
