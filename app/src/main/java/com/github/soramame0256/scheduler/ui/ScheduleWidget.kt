@@ -5,20 +5,12 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
 import com.github.soramame0256.scheduler.R
-import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
-import com.github.soramame0256.scheduler.ui.ScheduleWidget.Companion.coroutineScope
 import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -32,7 +24,7 @@ class ScheduleWidget : AppWidgetProvider() {
         // そのままrunBlockingで処理するとメインスレッドが死ぬのでAppWidgetProvider.goAsync
         // を使用してBroadcastReceiverを延長してからCoroutineで処理
         val pendingResult = goAsync()
-        coroutineScope.launch {
+        widgetScope.launch {
             try {
                 appWidgetIds.map { id -> async { updateAppWidget(context, appWidgetManager, service, id) } }.awaitAll()
             } finally {
@@ -65,6 +57,6 @@ class ScheduleWidget : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
     companion object {
-        private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        private val widgetScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 }
