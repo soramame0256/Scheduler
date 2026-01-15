@@ -1,5 +1,6 @@
 package com.github.soramame0256.scheduler
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.soramame0256.scheduler.ui.TimeRangeSettingsActivity
 import com.github.soramame0256.scheduler.ui.theme.SchedulerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +31,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        val intent = Intent(this, TimeRangeSettingsActivity::class.java)
+        startActivity(intent)
     }
 }
 

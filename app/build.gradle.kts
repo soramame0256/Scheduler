@@ -43,6 +43,9 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 dependencies {
+    implementation(libs.appcompat)
+    implementation(libs.preference)
+    implementation(libs.material)
     val roomVersion = "2.6.1"
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
