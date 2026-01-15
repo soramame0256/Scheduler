@@ -45,16 +45,17 @@ class ScheduleWidget : AppWidgetProvider() {
         val time = Time(hour, minute)
         val schedule = service.getScheduleAtTimeAndWeekday(time, weekday)
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
-        var message = schedule.fold(
+        val message = schedule.fold(
             onSuccess = { it.message },
             onFailure = { context.getString(R.string.no_schedule) }
         )
         views.setTextViewText(R.id.appwidget_text2, message)
-        message = schedule.fold(
+        val nextSchedule = service.getNextScheduleAtTimeAndWeekday(time, weekday)
+        val nextMessage = nextSchedule.fold(
             onSuccess = { it.message },
             onFailure = { context.getString(R.string.no_next_schedule) }
         )
-        views.setTextViewText(R.id.appwidget_text, message)
+        views.setTextViewText(R.id.appwidget_text, nextMessage)
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
     companion object {
