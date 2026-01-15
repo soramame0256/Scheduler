@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
 import com.github.soramame0256.scheduler.R
+import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
@@ -43,14 +44,16 @@ class ScheduleWidget : AppWidgetProvider() {
         val minute = now.minute
         val weekday = Weekday.from(now.dayOfWeek)
         val time = Time(hour, minute)
-        val schedule = service.getScheduleAtTimeAndWeekday(time, weekday)
+        val scheduleDeferred = coroutineScope.async { service.getScheduleAtTimeAndWeekday(time, weekday) }
+        val nextScheduleDeferred = coroutineScope.async { service.getNextScheduleAtTimeAndWeekday(time, weekday) }
+        val schedule: Result<Schedule> = scheduleDeferred.await()
+        val nextSchedule: Result<Schedule> = nextScheduleDeferred.await()
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
         val message = schedule.fold(
             onSuccess = { it.message },
             onFailure = { context.getString(R.string.no_schedule) }
         )
         views.setTextViewText(R.id.appwidget_text2, message)
-        val nextSchedule = service.getNextScheduleAtTimeAndWeekday(time, weekday)
         val nextMessage = nextSchedule.fold(
             onSuccess = { it.message },
             onFailure = { context.getString(R.string.no_next_schedule) }
