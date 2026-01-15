@@ -43,15 +43,14 @@ class ScheduleServiceImpl @Inject constructor(
     }
 
     override suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        val timeRanges = getAllTimeRanges()
-            .sortedBy { it.startTime }
-            .filter { it.startTime > time }
-        var result: Result<Schedule>
-        for (range in timeRanges) {
-            result = getScheduleAtTimeAndWeekday(range.startTime, weekday)
-            if (result.isSuccess) return result
+        val nextSchedule = getSchedules()
+            .filter { it.weekday == weekday && it.timeRange.startTime > time }
+            .minByOrNull { it.timeRange.startTime }
+        return if (nextSchedule != null) {
+            Result.success(nextSchedule)
+        } else {
+            Result.failure(ScheduleNotFoundException())
         }
-        return Result.failure(ScheduleNotFoundException())
 
     }
 
