@@ -15,17 +15,6 @@ class WeekdayConverter {
      */
     @TypeConverter
     fun fromDbValue(i: Int): Weekday {
-        val weekday = Weekday.fromValue(i)
-        return if (weekday == Weekday.ERROR) {
-            // weekdayが見つからなかった場合の処理
-            if (BuildConfig.DEBUG) {
-                throw IllegalArgumentException("データベースに無効な値が設定されています。: Weekday = $i")
-            } else {
-                Log.e("WeekdayConverter", "データベースに無効な値が設定されています。: Weekday = $i")
-                Weekday.ERROR
-            }
-        } else {
-            weekday
-        }
+        return Weekday.fromValue(i)
     }
 }
