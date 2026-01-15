@@ -9,6 +9,7 @@ import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
+import com.github.soramame0256.scheduler.ui.ScheduleWidget.Companion.coroutineScope
 import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -44,10 +46,11 @@ class ScheduleWidget : AppWidgetProvider() {
         val minute = now.minute
         val weekday = Weekday.from(now.dayOfWeek)
         val time = Time(hour, minute)
-        val scheduleDeferred = coroutineScope.async { service.getScheduleAtTimeAndWeekday(time, weekday) }
-        val nextScheduleDeferred = coroutineScope.async { service.getNextScheduleAtTimeAndWeekday(time, weekday) }
-        val schedule: Result<Schedule> = scheduleDeferred.await()
-        val nextSchedule: Result<Schedule> = nextScheduleDeferred.await()
+        val (schedule, nextSchedule) = coroutineScope {
+            val scheduleDeferred = async { service.getScheduleAtTimeAndWeekday(time, weekday) }
+            val nextScheduleDeferred = async { service.getNextScheduleAtTimeAndWeekday(time, weekday) }
+            scheduleDeferred.await() to nextScheduleDeferred.await()
+        }
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
         val message = schedule.fold(
             onSuccess = { it.message },
