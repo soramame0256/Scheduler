@@ -34,21 +34,16 @@ class ScheduleServiceImpl @Inject constructor(
     override suspend fun getAllTimeRanges(): List<TimeRange> = dao.getAllTimeRanges().map { timeRangeMapper.toDomain(it) }
 
     override suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        val schedule = dao.getScheduleAtTimeAndWeekday(time, weekday)
-        return if (schedule != null) {
-            Result.success(scheduleMapper.toDomain(schedule))
-        } else {
-            Result.failure(ScheduleNotFoundException())
-        }
+        return dao.getScheduleAtTimeAndWeekday(time, weekday)
+            ?.let { Result.success(scheduleMapper.toDomain(it))}
+            ?: Result.failure(ScheduleNotFoundException())
     }
 
     override suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule> {
-        val nextSchedule = dao.getNextScheduleAtTimeAndWeekday(time, weekday)
-        return if (nextSchedule != null) {
-            Result.success(scheduleMapper.toDomain(nextSchedule))
-        } else {
-            Result.failure(ScheduleNotFoundException())
-        }
+        return dao.getNextScheduleAtTimeAndWeekday(time, weekday)
+            ?.let { Result.success(scheduleMapper.toDomain(it))}
+            ?: Result.failure(ScheduleNotFoundException())
+
 
     }
 
