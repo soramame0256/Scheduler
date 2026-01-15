@@ -30,4 +30,5 @@
             android:textAppearance="@android:style/TextAppearance.Material.Display1" android:textStyle="normal"
             android:textAlignment="center" android:textAllCaps="false"
             android:visibility="visible"/>
+    <!-- TODO: This TextView (appwidget_text) is currently unused but will be used in a future update to display the next schedule. -->
 </LinearLayout>
