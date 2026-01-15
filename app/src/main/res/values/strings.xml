@@ -2,7 +2,7 @@
     <string name="app_name">Scheduler</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="app_widget_description">現在の予定を表示するウィジェットです。</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="no_schedule">現在の予定はありません。</string>
 </resources>
