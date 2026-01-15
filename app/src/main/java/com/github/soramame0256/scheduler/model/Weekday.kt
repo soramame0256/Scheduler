@@ -1,5 +1,9 @@
 package com.github.soramame0256.scheduler.model
 
+import android.util.Log
+import com.github.soramame0256.scheduler.BuildConfig
+import java.time.DayOfWeek
+
 enum class Weekday(val value: Int) {
     SUNDAY(0),
     MONDAY(1),
@@ -12,6 +16,13 @@ enum class Weekday(val value: Int) {
 
     companion object {
         private val map = entries.associateBy(Weekday::value)
-        fun fromValue(value: Int): Weekday? = map[value]
+        fun fromValue(value: Int): Weekday = map[value] ?: when {
+            BuildConfig.DEBUG -> throw IllegalArgumentException("Invalid Weekday value: $value")
+            else -> {
+                Log.e("Weekday", "Invalid value was entered: value = $value")
+                ERROR
+            }
+        }
+        fun from(dayOfWeek: DayOfWeek) = fromValue(dayOfWeek.value % 7)
     }
 }

@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:theme="@style/Theme.Scheduler.AppWidgetContainer"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/widget_background" android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/appwidget_text2"
+            style="@style/Widget.Scheduler.TextView"
+            android:text="@string/appwidget_text" />
+
+    <TextView
+            android:id="@+id/appwidget_text"
+            style="@style/Widget.Scheduler.TextView"
+            android:text="@string/appwidget_text"
+            android:visibility="gone" />
+    <!-- TODO: This TextView (appwidget_text) is currently unused but will be used in a future update to display the next schedule. -->
+</LinearLayout>

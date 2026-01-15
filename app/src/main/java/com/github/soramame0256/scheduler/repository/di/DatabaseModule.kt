@@ -23,7 +23,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             DATABASE_NAME
         ).fallbackToDestructiveMigration().build()
-        // リリース後要変更
+        // TODO: リリース後要変更
     }
 
     @Provides
