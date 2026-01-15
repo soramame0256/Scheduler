@@ -34,13 +34,14 @@ class ScheduleWidget : AppWidgetProvider() {
         }
     }
     private suspend fun updateAppWidget(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int) {
+        context ?: return
         val cal = Calendar.getInstance()
         val hour = cal.get(Calendar.HOUR_OF_DAY)
         val minute = cal.get(Calendar.MINUTE)
         val time = Time(hour, minute)
         val weekday = Weekday.fromValue(cal.get(Calendar.DAY_OF_WEEK))
         val schedule = service.getScheduleAtTimeAndWeekday(time, weekday)
-        val views = RemoteViews(context!!.packageName, R.layout.schedule_widget)
+        val views = RemoteViews(context.packageName, R.layout.schedule_widget)
         val message = schedule.fold(
             onSuccess = { it.message },
             onFailure = { "現在の予定はありません。" }
