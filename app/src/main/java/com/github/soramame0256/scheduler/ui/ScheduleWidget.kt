@@ -4,7 +4,9 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
+import androidx.annotation.StringRes
 import com.github.soramame0256.scheduler.R
+import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
@@ -50,17 +52,17 @@ class ScheduleWidget : AppWidgetProvider() {
             scheduleDeferred.await() to nextScheduleDeferred.await()
         }
         val views = RemoteViews(context.packageName, R.layout.schedule_widget)
-        val message = schedule.fold(
-            onSuccess = { it.message },
-            onFailure = { context.getString(R.string.no_schedule) }
-        )
+        val message = schedule.toMessage(context, R.string.no_schedule)
+        val nextMessage = nextSchedule.toMessage(context, R.string.no_next_schedule)
         views.setTextViewText(R.id.appwidget_text2, message)
-        val nextMessage = nextSchedule.fold(
-            onSuccess = { it.message },
-            onFailure = { context.getString(R.string.no_next_schedule) }
-        )
         views.setTextViewText(R.id.appwidget_text, nextMessage)
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+    private fun Result<Schedule>.toMessage(context: Context, @StringRes defaultMessageResId: Int): String {
+        return fold(
+            onSuccess = { it.message },
+            onFailure = { context.getString(defaultMessageResId) }
+        )
     }
     companion object {
         private val widgetScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
