@@ -1,3 +1,7 @@
 package com.github.soramame0256.scheduler.model
 
-data class TimeRange(val id: Long = 0, val startTime: Time, val endTime: Time)
+data class TimeRange(val id: Long = 0, val startTime: Time, val endTime: Time) {
+    override fun toString(): String {
+        return "$startTime -> $endTime"
+    }
+}
