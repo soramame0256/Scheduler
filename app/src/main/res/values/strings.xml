@@ -22,4 +22,13 @@
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="_00_00">00:00</string>
+    <string name="time_range_settings_starttime_in">開始時刻</string>
+    <string name="time_range_settings_endtime_in">終了時間</string>
+    <string name="invalidTimeRange">時間が入力できていません!</string>
+    <string name="timeRangeInsertSuccess">追加しました!</string>
+    <string name="time_range_settings_conflict">競合する値が存在します!</string>
+    <string name="invalidInput">入力値が正しくありません!</string>
+    <string name="time_range_settings_category_add">追加</string>
+    <string name="time_range_settings_category_remove">削除</string>
 </resources>

@@ -1,23 +1,66 @@
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-            android:id="@+id/settings"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" tools:ignore="UselessParent">
-        <EditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:autofillHints="" android:inputType="time"
-                android:ems="10"
-                android:id="@+id/editTextTime" tools:ignore="LabelFor"/>
-        <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add"/>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp" android:orientation="horizontal"> <!-- 少し余白を入れると綺麗になります -->
 
-    </LinearLayout>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" tools:ignore="UselessParent">
+        <LinearLayout
+                android:id="@+id/settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"> <!-- 横(horizontal)から縦(vertical)に変更 -->
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"/>
+            <TextView
+                    android:text="@string/time_range_settings_category_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView" android:scaleX="1"
+                    android:scaleY="1" android:textSize="24sp" android:textStyle="bold"
+                    android:textColor="@android:color/holo_blue_light"/>
+            <TextView
+                    android:text="@string/time_range_settings_starttime_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView2"/>
+            <EditText
+                    android:id="@+id/editTextTimeStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:autofillHints=""
+                    android:hint="@string/_00_00"
+                    android:inputType="time"
+                    android:ems="10"
+                    tools:ignore="LabelFor"/>
+            <TextView
+                    android:text="@string/time_range_settings_endtime_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"/>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <EditText
+                        android:id="@+id/editTextTimeEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:autofillHints=""
+                        android:hint="@string/_00_00"
+                        android:inputType="time"
+                        android:ems="10"
+                        tools:ignore="LabelFor"/>
+                <Button
+                        android:id="@+id/button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/add" android:translationY="-10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
