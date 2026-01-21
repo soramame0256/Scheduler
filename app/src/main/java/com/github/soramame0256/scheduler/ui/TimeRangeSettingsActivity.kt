@@ -1,35 +1,21 @@
 package com.github.soramame0256.scheduler.ui
 
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
-import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
-import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import com.github.soramame0256.scheduler.service.ScheduleService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class TimeRangeSettingsActivity : AppCompatActivity() {
-    private val service by lazy {
-        val hiltEntryPoint = EntryPointAccessors.fromApplication(
-            this.applicationContext,
-            ScheduleWidgetEntryPoint::class.java
-        )
-        hiltEntryPoint.scheduleService()
-    }
+    @Inject
+    private lateinit var service: ScheduleService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
