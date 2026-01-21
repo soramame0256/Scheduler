@@ -1,9 +1,11 @@
 package com.github.soramame0256.scheduler.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.service.ScheduleService
@@ -23,7 +25,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val editTextTimeStart = findViewById<EditText>(R.id.editTextTimeStart)
         val editTextTimeEnd = findViewById<EditText>(R.id.editTextTimeEnd)
         val addButton = findViewById<Button>(R.id.button)
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch {
             update()
         }
         addButton.setOnClickListener {
@@ -43,7 +45,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                         val start = Time(startHour, startMinute)
                         val end = Time(endHour, endMinute)
                         // ボタンクリック時の処理だしまぁメインスレッドでもいいでしょう...
-                        runBlocking {
+                        lifecycleScope.launch {
                             val conflicts = service.getAllTimeRanges().filter {
                                 start < it.endTime && it.startTime < end
                             }
@@ -87,7 +89,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             val deleteButton = Button(this)
             deleteButton.text = getString(R.string.header_delete)
             deleteButton.setOnClickListener {
-                runBlocking {
+                lifecycleScope.launch {
                     service.deleteTimeRange(timeRange)
                     update()
                     // TODO: ここでたまにAndroidRuntimeExceptionが出るので直す。
