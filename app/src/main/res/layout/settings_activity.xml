@@ -25,7 +25,8 @@
             <TextView
                     android:text="@string/time_range_settings_starttime_in"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView2"/>
+                    android:layout_height="wrap_content" android:id="@+id/textView2"
+                    android:labelFor="@+id/editTextTimeStart"/>
             <EditText
                     android:id="@+id/editTextTimeStart"
                     android:layout_width="wrap_content"
@@ -34,12 +35,14 @@
                     android:hint="@string/_00_00"
                     android:inputType="time"
                     android:ems="10"
-                    tools:ignore="LabelFor"/>
+            />
             <TextView
                     android:text="@string/time_range_settings_endtime_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"/>
+                    android:id="@+id/textView3"
+                    android:labelFor="@+id/editTextTimeEnd"
+            />
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -51,8 +54,7 @@
                         android:autofillHints=""
                         android:hint="@string/_00_00"
                         android:inputType="time"
-                        android:ems="10"
-                        tools:ignore="LabelFor"/>
+                        android:ems="10"/>
                 <Button
                         android:id="@+id/button"
                         android:layout_width="wrap_content"
