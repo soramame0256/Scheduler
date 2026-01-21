@@ -80,6 +80,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+    @MainThread
     private suspend fun update() {
         val table = findViewById<TableLayout>(R.id.trrtablelayout)
         table.removeAllViews()
