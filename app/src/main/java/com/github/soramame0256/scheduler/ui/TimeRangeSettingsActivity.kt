@@ -1,32 +1,45 @@
 package com.github.soramame0256.scheduler.ui
 
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.ui.di.ScheduleWidgetEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 
 class TimeRangeSettingsActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val service by lazy {
         val hiltEntryPoint = EntryPointAccessors.fromApplication(
             this.applicationContext,
             ScheduleWidgetEntryPoint::class.java
         )
-        val service = hiltEntryPoint.scheduleService()
+        hiltEntryPoint.scheduleService()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
         val editTextTimeStart = findViewById<EditText>(R.id.editTextTimeStart)
         val editTextTimeEnd = findViewById<EditText>(R.id.editTextTimeEnd)
         val addButton = findViewById<Button>(R.id.button)
+        CoroutineScope(Dispatchers.IO).launch {
+            update()
+        }
         addButton.setOnClickListener {
             val startTimeString = editTextTimeStart.text.toString()
             val endTimeString = editTextTimeEnd.text.toString()
@@ -43,6 +56,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                         val endMinute = endTimeParts[1].toInt()
                         val start = Time(startHour, startMinute)
                         val end = Time(endHour, endMinute)
+                        // ボタンクリック時の処理だしまぁメインスレッドでもいいでしょう...
                         runBlocking {
                             val conflicts = service.getAllTimeRanges().filter {
                                 start < it.endTime && it.startTime < end
@@ -53,6 +67,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                             } else {
                                 Toast.makeText(this@TimeRangeSettingsActivity, R.string.time_range_settings_conflict, Toast.LENGTH_SHORT).show()
                             }
+                            update()
                         }
                     } else {
                         throw Exception()
@@ -65,8 +80,35 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-    private fun update() {
-
+    private suspend fun update() {
+        val table = findViewById<TableLayout>(R.id.trrtablelayout)
+        table.removeAllViews()
+        val timeRanges = service.getAllTimeRanges()
+        val row = TableRow(this)
+        val textViewTimeRangeHeader = TextView(this)
+        textViewTimeRangeHeader.text = getString(R.string.header_time_range)
+        row.addView(textViewTimeRangeHeader)
+        val deleteButtonHeader = TextView(this)
+        deleteButtonHeader.text = getString(R.string.header_delete)
+        row.addView(deleteButtonHeader)
+        table.addView(row)
+        timeRanges.forEach { timeRange ->
+            val row = TableRow(this)
+            val textViewTimeRange = TextView(this)
+            textViewTimeRange.text = timeRange.toString()
+            row.addView(textViewTimeRange)
+            val deleteButton = Button(this)
+            deleteButton.text = getString(R.string.header_delete)
+            deleteButton.setOnClickListener {
+                runBlocking {
+                    service.deleteTimeRange(timeRange)
+                    update()
+                    // TODO: ここでたまにAndroidRuntimeExceptionが出るので直す。
+                }
+            }
+            row.addView(deleteButton)
+            table.addView(row)
+        }
     }
     companion object {
         @JvmStatic
