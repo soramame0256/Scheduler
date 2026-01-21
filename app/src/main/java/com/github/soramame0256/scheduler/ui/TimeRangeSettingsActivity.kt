@@ -1,7 +1,6 @@
 package com.github.soramame0256.scheduler.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
@@ -33,36 +32,38 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             val endTimeString = editTextTimeEnd.text.toString()
 
             if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
-                try {
-                    if (!timeValidator.matcher(startTimeString).matches() || !timeValidator.matcher(endTimeString).matches()) throw Exception()
-                    val startTimeParts = startTimeString.split(":")
-                    val endTimeParts = endTimeString.split(":")
-                    if (startTimeParts.size == 2 && endTimeParts.size == 2) {
-                        val startHour = startTimeParts[0].toInt()
-                        val startMinute = startTimeParts[1].toInt()
-                        val endHour = endTimeParts[0].toInt()
-                        val endMinute = endTimeParts[1].toInt()
-                        val start = Time(startHour, startMinute)
-                        val end = Time(endHour, endMinute)
-                        // ボタンクリック時の処理だしまぁメインスレッドでもいいでしょう...
-                        lifecycleScope.launch {
-                            val conflicts = service.getAllTimeRanges().filter {
-                                start < it.endTime && it.startTime < end
-                            }
-                            if (conflicts.isEmpty()) {
-                                service.insertTimeRange(start, end)
-                                Toast.makeText(this@TimeRangeSettingsActivity, R.string.timeRangeInsertSuccess, Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(this@TimeRangeSettingsActivity, R.string.time_range_settings_conflict, Toast.LENGTH_SHORT).show()
-                            }
-                            update()
-                        }
-                    } else {
-                        throw Exception()
+                if (!timeValidator.matcher(startTimeString).matches() || !timeValidator.matcher(endTimeString).matches()) {
+                    Toast.makeText(
+                        this@TimeRangeSettingsActivity,
+                        this.getText(R.string.invalidTimeRange),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+                val startTimeParts = startTimeString.split(":")
+                val endTimeParts = endTimeString.split(":")
+                if (startTimeParts.size != 2 || endTimeParts.size != 2) {
+                    Toast.makeText(this@TimeRangeSettingsActivity, this.getText(R.string.invalidTimeRange), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                // timeValidatorによる入力値制御によりここで数値変換にエラーが起きることはないはず。
+                val startHour = startTimeParts[0].toInt()
+                val startMinute = startTimeParts[1].toInt()
+                val endHour = endTimeParts[0].toInt()
+                val endMinute = endTimeParts[1].toInt()
+                val start = Time(startHour, startMinute)
+                val end = Time(endHour, endMinute)
+                lifecycleScope.launch {
+                    val conflicts = service.getAllTimeRanges().filter {
+                        start < it.endTime && it.startTime < end
                     }
-                } catch (e: Exception) {
-                    Log.e("TimeRangeSettingsActivity", "error thrown", e)
-                    Toast.makeText(this, this.getText(R.string.invalidTimeRange), Toast.LENGTH_SHORT).show()
+                    if (conflicts.isEmpty()) {
+                        service.insertTimeRange(start, end)
+                        Toast.makeText(this@TimeRangeSettingsActivity, R.string.timeRangeInsertSuccess, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@TimeRangeSettingsActivity, R.string.time_range_settings_conflict, Toast.LENGTH_SHORT).show()
+                    }
+                    update()
                 }
             }
         }
