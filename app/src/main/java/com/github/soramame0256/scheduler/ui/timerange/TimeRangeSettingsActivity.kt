@@ -25,7 +25,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         val editTextTimeStart = binding.editTextTimeStart
         val editTextTimeEnd = binding.editTextTimeEnd
         val addButton = binding.button
@@ -33,44 +33,28 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             update()
         }
         addButton.setOnClickListener {
-            val startTimeString = editTextTimeStart.text.toString()
-            val endTimeString = editTextTimeEnd.text.toString()
-
-            if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
-                if (!timeValidator.matcher(startTimeString).matches() || !timeValidator.matcher(endTimeString).matches()) {
-                    showToast(R.string.invalidInput)
-                    return@setOnClickListener
+            val validationResult = validate(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString());
+            when (validationResult) {
+                ValidationResult.EMPTY -> {
+                    showToast(R.string.empty_input)
                 }
-                val startTimeParts = startTimeString.split(":")
-                val endTimeParts = endTimeString.split(":")
-
-                val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
-                    showToast(R.string.invalidInput)
-                    return@setOnClickListener
+                ValidationResult.INVALID -> {
+                    showToast(R.string.invalid_input)
                 }
-
-                val (endHour, endMinute) = parseTimeParts(endTimeParts) ?: run {
-                    showToast(R.string.invalidInput)
-                    return@setOnClickListener
-                }
-                val start = Time(startHour, startMinute)
-                val end = Time(endHour, endMinute)
-                lifecycleScope.launch {
-                    val conflicts = service.getAllTimeRanges().filter {
-                        start < it.endTime && it.startTime < end
+                else -> {
+                    val (start, end) = castInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString()).getOrNull() ?: run {
+                        showToast(R.string.invalid_input)
+                        return@setOnClickListener
                     }
-                    if (conflicts.isEmpty()) {
-                        withContext(Dispatchers.IO) {
-                            service.insertTimeRange(start, end)
+                    lifecycleScope.launch {
+                        val insertionResult = tryInsertTimeRange(start, end)
+                        when (insertionResult) {
+                            InsertionResult.SUCCESS -> showToast(R.string.time_range_insert_success)
+                            InsertionResult.CONFLICT -> showToast(R.string.time_range_settings_conflict)
                         }
-                        showToast(R.string.timeRangeInsertSuccess)
-                    } else {
-                        showToast(R.string.time_range_settings_conflict)
+                        update()
                     }
-                    update()
                 }
-            } else {
-                showToast(R.string.emptyInput)
             }
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -80,7 +64,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val timeRanges = withContext(Dispatchers.IO) {
             service.getAllTimeRanges()
         }
-        
+
         withContext(Dispatchers.Main) {
             binding.trrtablelayout.adapter = TimeRangeRecyclerAdapter(timeRanges) { timeRange ->
                 lifecycleScope.launch {
@@ -104,6 +88,49 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val minute = timeParts[1].toIntOrNull() ?: return null
 
         return Pair(hour, minute)
+    }
+
+    private fun validate(startTimeString: String, endTimeString: String) : ValidationResult {
+        return if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
+            if (timeValidator.matcher(startTimeString).matches() && timeValidator.matcher(endTimeString).matches()) {
+                ValidationResult.VALID
+            } else {
+                ValidationResult.INVALID
+            }
+        } else {
+            ValidationResult.EMPTY
+        }
+    }
+    private fun castInput(startTimeString: String, endTimeString: String): Result<Pair<Time, Time>> {
+        val startTimeParts = startTimeString.split(":")
+        val endTimeParts = endTimeString.split(":")
+        val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
+            return Result.failure(IllegalArgumentException("Invalid time format"))
+        }
+
+        val (endHour, endMinute) = parseTimeParts(endTimeParts) ?: run {
+            return Result.failure(IllegalArgumentException("Invalid time format"))
+        }
+        return Result.success(Time(startHour, startMinute) to Time(endHour, endMinute))
+    }
+    private suspend fun tryInsertTimeRange(start: Time, end: Time) : InsertionResult {
+        val conflicts = service.getAllTimeRanges().filter {
+            start < it.endTime && it.startTime < end
+        }
+        if (conflicts.isEmpty()) {
+            withContext(Dispatchers.IO) {
+                service.insertTimeRange(start, end)
+            }
+            return InsertionResult.SUCCESS
+        } else {
+            return InsertionResult.CONFLICT
+        }
+    }
+    enum class ValidationResult {
+        VALID, INVALID, EMPTY
+    }
+    enum class InsertionResult {
+        SUCCESS, CONFLICT
     }
     companion object {
         @JvmStatic
