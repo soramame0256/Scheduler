@@ -16,7 +16,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TimeRangeSettingsActivity : AppCompatActivity() {
     @Inject
-    private lateinit var service: ScheduleService
+    lateinit var service: ScheduleService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
