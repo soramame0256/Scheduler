@@ -44,7 +44,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             update()
         }
         addButton.setOnClickListener {
-            val validationResult = validate(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString());
+            val validationResult = validate(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
             when (validationResult) {
                 ValidationResult.EMPTY -> {
                     showToast(R.string.empty_input)
