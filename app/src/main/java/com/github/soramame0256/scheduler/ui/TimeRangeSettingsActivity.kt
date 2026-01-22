@@ -21,7 +21,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        setContentView(R.layout.time_range_settings_activity)
         val editTextTimeStart = findViewById<EditText>(R.id.editTextTimeStart)
         val editTextTimeEnd = findViewById<EditText>(R.id.editTextTimeEnd)
         val addButton = findViewById<Button>(R.id.button)
