@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
+import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.service.ScheduleService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +57,9 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                         start < it.endTime && it.startTime < end
                     }
                     if (conflicts.isEmpty()) {
-                        service.insertTimeRange(start, end)
+                        withContext(Dispatchers.IO) {
+                            service.insertTimeRange(start, end)
+                        }
                         showToast(R.string.timeRangeInsertSuccess)
                     } else {
                         showToast(R.string.time_range_settings_conflict)
@@ -74,7 +77,10 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             val context = this@TimeRangeSettingsActivity
             val table = findViewById<TableLayout>(R.id.trrtablelayout)
             table.removeAllViews()
-            val timeRanges = service.getAllTimeRanges()
+            var timeRanges: List<TimeRange>
+            withContext(Dispatchers.IO) {
+                timeRanges = service.getAllTimeRanges()
+            }
             val row = TableRow(context)
             val textViewTimeRangeHeader = TextView(context)
             textViewTimeRangeHeader.text = getString(R.string.header_time_range)
