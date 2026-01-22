@@ -2,14 +2,15 @@ package com.github.soramame0256.scheduler.ui
 
 import android.os.Bundle
 import android.widget.*
-import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.service.ScheduleService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -71,34 +72,36 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-    @MainThread
     private suspend fun update() {
-        val table = findViewById<TableLayout>(R.id.trrtablelayout)
-        table.removeAllViews()
-        val timeRanges = service.getAllTimeRanges()
-        val row = TableRow(this)
-        val textViewTimeRangeHeader = TextView(this)
-        textViewTimeRangeHeader.text = getString(R.string.header_time_range)
-        row.addView(textViewTimeRangeHeader)
-        val deleteButtonHeader = TextView(this)
-        deleteButtonHeader.text = getString(R.string.header_delete)
-        row.addView(deleteButtonHeader)
-        table.addView(row)
-        timeRanges.forEach { timeRange ->
-            val row = TableRow(this)
-            val textViewTimeRange = TextView(this)
-            textViewTimeRange.text = timeRange.toString()
-            row.addView(textViewTimeRange)
-            val deleteButton = Button(this)
-            deleteButton.text = getString(R.string.header_delete)
-            deleteButton.setOnClickListener {
-                lifecycleScope.launch {
-                    service.deleteTimeRange(timeRange)
-                    update()
-                }
-            }
-            row.addView(deleteButton)
+        withContext(Dispatchers.Main) {
+            val context = this@TimeRangeSettingsActivity
+            val table = findViewById<TableLayout>(R.id.trrtablelayout)
+            table.removeAllViews()
+            val timeRanges = service.getAllTimeRanges()
+            val row = TableRow(context)
+            val textViewTimeRangeHeader = TextView(context)
+            textViewTimeRangeHeader.text = getString(R.string.header_time_range)
+            row.addView(textViewTimeRangeHeader)
+            val deleteButtonHeader = TextView(context)
+            deleteButtonHeader.text = getString(R.string.header_delete)
+            row.addView(deleteButtonHeader)
             table.addView(row)
+            timeRanges.forEach { timeRange ->
+                val row = TableRow(context)
+                val textViewTimeRange = TextView(context)
+                textViewTimeRange.text = timeRange.toString()
+                row.addView(textViewTimeRange)
+                val deleteButton = Button(context)
+                deleteButton.text = getString(R.string.header_delete)
+                deleteButton.setOnClickListener {
+                    lifecycleScope.launch {
+                        service.deleteTimeRange(timeRange)
+                        update()
+                    }
+                }
+                row.addView(deleteButton)
+                table.addView(row)
+            }
         }
     }
 
