@@ -95,7 +95,9 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                 deleteButton.text = getString(R.string.header_delete)
                 deleteButton.setOnClickListener {
                     lifecycleScope.launch {
-                        service.deleteTimeRange(timeRange)
+                        withContext(Dispatchers.IO) {
+                            service.deleteTimeRange(timeRange)
+                        }
                         update()
                     }
                 }
