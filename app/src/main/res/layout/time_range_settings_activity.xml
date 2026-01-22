@@ -1,83 +1,75 @@
-<LinearLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp" android:orientation="vertical">
-
-    <ScrollView
+        android:layout_height="match_parent">
+    <LinearLayout
+            android:id="@+id/settings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" tools:ignore="UselessParent">
-        <LinearLayout
-                android:id="@+id/settings"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+        <TextView
+                android:text="@string/time_range_settings_category_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView"
+                android:textSize="24sp" android:textStyle="bold"
+                android:textColor="@color/light_blue_200"/>
+        <TextView
+                android:text="@string/time_range_settings_starttime_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView2"
+                android:labelFor="@+id/editTextTimeStart"/>
+        <EditText
+                android:id="@+id/editTextTimeStart"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:autofillHints=""
+                android:hint="@string/_00_00"
+                android:inputType="time"
+                android:ems="10"
+        />
+        <TextView
+                android:text="@string/time_range_settings_endtime_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"/>
-            <TextView
-                    android:text="@string/time_range_settings_category_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView"
-                    android:textSize="24sp" android:textStyle="bold"
-                    android:textColor="@color/light_blue_200"/>
-            <TextView
-                    android:text="@string/time_range_settings_starttime_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView2"
-                    android:labelFor="@+id/editTextTimeStart"/>
+                android:id="@+id/textView3"
+                android:labelFor="@+id/editTextTimeEnd"
+        />
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <EditText
-                    android:id="@+id/editTextTimeStart"
+                    android:id="@+id/editTextTimeEnd"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:autofillHints=""
                     android:hint="@string/_00_00"
                     android:inputType="time"
-                    android:ems="10"
-            />
-            <TextView
-                    android:text="@string/time_range_settings_endtime_in"
-                    android:layout_width="match_parent"
+                    android:ems="10"/>
+            <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
-                    android:labelFor="@+id/editTextTimeEnd"
-            />
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                <EditText
-                        android:id="@+id/editTextTimeEnd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:autofillHints=""
-                        android:hint="@string/_00_00"
-                        android:inputType="time"
-                        android:ems="10"/>
-                <Button
-                        android:id="@+id/button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/add"/>
-            </LinearLayout>
-            <TextView
-                    android:text="@string/time_range_settings_category_remove"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView4"
-                    android:textSize="24sp" android:textStyle="bold"
-                    android:textColor="@color/light_blue_200"/>
-            <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/trrtablelayout"
-                    android:stretchColumns="0"
-                    android:shrinkColumns="0"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp">
-            </TableLayout>
-
+                    android:text="@string/add"/>
         </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+        <TextView
+                android:text="@string/time_range_settings_category_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView4"
+                android:textSize="24sp" android:textStyle="bold"
+                android:textColor="@color/light_blue_200"/>
+        <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/trrtablelayout"
+                android:stretchColumns="0"
+                android:shrinkColumns="0"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>
