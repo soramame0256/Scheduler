@@ -6,7 +6,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="no_schedule">現在の予定はありません。</string>
     <string name="no_next_schedule">☆☆☆本日は終了しました☆☆☆</string>
-    <string name="title_activity_time_range_settings">TimeRangeSettingsActivity</string>
+    <string name="title_activity_time_range_settings">時間割設定</string>
     <string name="add">追加</string>
     <string name="_00_00">00:00</string>
     <string name="time_range_settings_starttime_in">開始時刻</string>
