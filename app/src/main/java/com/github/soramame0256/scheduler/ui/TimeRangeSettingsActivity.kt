@@ -5,6 +5,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.soramame0256.scheduler.R
+import com.github.soramame0256.scheduler.databinding.TimeRangeSettingsActivityBinding
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.service.ScheduleService
@@ -22,10 +23,11 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
         setContentView(R.layout.time_range_settings_activity)
-        val editTextTimeStart = findViewById<EditText>(R.id.editTextTimeStart)
-        val editTextTimeEnd = findViewById<EditText>(R.id.editTextTimeEnd)
-        val addButton = findViewById<Button>(R.id.button)
+        val editTextTimeStart = binding.editTextTimeStart
+        val editTextTimeEnd = binding.editTextTimeEnd
+        val addButton = binding.button
         lifecycleScope.launch {
             update()
         }
@@ -75,7 +77,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     private suspend fun update() {
         withContext(Dispatchers.Main) {
             val context = this@TimeRangeSettingsActivity
-            val table = findViewById<TableLayout>(R.id.trrtablelayout)
+            val binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
+            val table = binding.trrtablelayout
             table.removeAllViews()
             var timeRanges: List<TimeRange>
             withContext(Dispatchers.IO) {
