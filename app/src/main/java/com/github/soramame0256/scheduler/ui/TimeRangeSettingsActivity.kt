@@ -34,7 +34,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
 
             if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
                 if (!timeValidator.matcher(startTimeString).matches() || !timeValidator.matcher(endTimeString).matches()) {
-                    showToast(R.string.invalidTimeRange)
+                    showToast(R.string.invalidInput)
                     return@setOnClickListener
                 }
                 val startTimeParts = startTimeString.split(":")
