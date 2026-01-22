@@ -8,7 +8,7 @@ import com.github.soramame0256.scheduler.repository.converter.WeekdayConverter
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
 import com.github.soramame0256.scheduler.repository.entity.TimeRangeEntity
 
-@Database(entities = [ScheduleEntity::class, TimeRangeEntity::class], version = 1, exportSchema = true)
+@Database(entities = [ScheduleEntity::class, TimeRangeEntity::class], version = 2, exportSchema = true)
 @TypeConverters(TimeConverter::class, WeekdayConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun scheduleDao(): ScheduleDao
