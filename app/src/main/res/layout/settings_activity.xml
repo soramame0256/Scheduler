@@ -59,8 +59,7 @@
                         android:id="@+id/button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/add" android:translationY="-10dp"/>
+                        android:text="@string/add"/>
             </LinearLayout>
             <TextView
                     android:text="@string/time_range_settings_category_remove"
