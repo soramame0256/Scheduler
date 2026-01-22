@@ -120,10 +120,10 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         return Result.success(Time(startHour, startMinute) to Time(endHour, endMinute))
     }
     private suspend fun tryInsertTimeRange(start: Time, end: Time) : InsertionResult {
-        val conflicts = service.getAllTimeRanges().filter {
-            start < it.endTime && it.startTime < end
+        val conflicts = withContext(Dispatchers.IO) {
+            service.countConflicts(start, end)
         }
-        if (conflicts.isEmpty()) {
+        if (conflicts == 0) {
             withContext(Dispatchers.IO) {
                 service.insertTimeRange(start, end)
             }
