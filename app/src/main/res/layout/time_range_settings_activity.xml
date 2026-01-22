@@ -19,8 +19,8 @@
             <TextView
                     android:text="@string/time_range_settings_category_add"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView" android:scaleX="1"
-                    android:scaleY="1" android:textSize="24sp" android:textStyle="bold"
+                    android:layout_height="wrap_content" android:id="@+id/textView"
+                    android:textSize="24sp" android:textStyle="bold"
                     android:textColor="@color/light_blue_200"/>
             <TextView
                     android:text="@string/time_range_settings_starttime_in"
@@ -64,8 +64,8 @@
             <TextView
                     android:text="@string/time_range_settings_category_remove"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView4" android:scaleX="1"
-                    android:scaleY="1" android:textSize="24sp" android:textStyle="bold"
+                    android:layout_height="wrap_content" android:id="@+id/textView4"
+                    android:textSize="24sp" android:textStyle="bold"
                     android:textColor="@color/light_blue_200"/>
             <TableLayout
                     android:layout_width="match_parent"
