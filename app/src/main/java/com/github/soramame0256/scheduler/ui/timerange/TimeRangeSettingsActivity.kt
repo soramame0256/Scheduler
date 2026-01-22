@@ -1,19 +1,12 @@
 package com.github.soramame0256.scheduler.ui.timerange
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.TableRow
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.databinding.TimeRangeSettingsActivityBinding
 import com.github.soramame0256.scheduler.model.Time
-import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.service.ScheduleService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
