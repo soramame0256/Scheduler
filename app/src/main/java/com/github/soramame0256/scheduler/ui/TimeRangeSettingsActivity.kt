@@ -39,11 +39,6 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                 }
                 val startTimeParts = startTimeString.split(":")
                 val endTimeParts = endTimeString.split(":")
-
-                if (startTimeParts.size != 2 || endTimeParts.size != 2) {
-                    showToast(R.string.invalidTimeRange)
-                    return@setOnClickListener
-                }
                 
                 val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
                     showToast(R.string.invalidInput)
