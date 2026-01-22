@@ -44,19 +44,13 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             update()
         }
         addButton.setOnClickListener {
-            val validationResult = validate(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
-            when (validationResult) {
-                ValidationResult.EMPTY -> {
-                    showToast(R.string.empty_input)
-                }
-                ValidationResult.INVALID -> {
-                    showToast(R.string.invalid_input)
-                }
-                else -> {
-                    val (start, end) = castInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString()).getOrNull() ?: run {
-                        showToast(R.string.invalid_input)
-                        return@setOnClickListener
-                    }
+           val parsed = parseAndValidateInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
+            when (parsed) {
+                is TimeInputResult.Empty -> showToast(R.string.empty_input)
+                is TimeInputResult.InvalidFormat -> showToast(R.string.invalid_input)
+                is TimeInputResult.StartAfterEnd -> showToast(R.string.start_time_later_than_end)
+                is TimeInputResult.Success -> {
+                    val (start, end) = parsed
                     lifecycleScope.launch {
                         val insertionResult = tryInsertTimeRange(start, end)
                         when (insertionResult) {
@@ -85,39 +79,25 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
-    private fun parseTimeParts(timeParts: List<String>): Pair<Int, Int>? {
-        if (timeParts.size != 2) return null
+    private fun parseAndValidateInput(startTimeString: String, endTimeString: String): TimeInputResult {
+        if (startTimeString.isEmpty() || endTimeString.isEmpty()) return TimeInputResult.Empty
 
-        val hour = timeParts[0].toIntOrNull() ?: return null
-        val minute = timeParts[1].toIntOrNull() ?: return null
+        if (!timeValidator.matcher(startTimeString).matches() ||
+            !timeValidator.matcher(endTimeString).matches()) return TimeInputResult.InvalidFormat
 
-        return Pair(hour, minute)
+        val start = parseTime(startTimeString) ?: return TimeInputResult.InvalidFormat
+        val end = parseTime(endTimeString) ?: return TimeInputResult.InvalidFormat
+
+        if (start >= end) return TimeInputResult.StartAfterEnd
+
+        return TimeInputResult.Success(start, end)
     }
 
-    private fun validate(startTimeString: String, endTimeString: String) : ValidationResult {
-        return if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
-            if (timeValidator.matcher(startTimeString).matches() && timeValidator.matcher(endTimeString).matches()) {
-                val (start, end) = castInput(startTimeString, endTimeString).getOrNull() ?: return ValidationResult.INVALID
-                if (start >= end) return ValidationResult.INVALID
-                ValidationResult.VALID
-            } else {
-                ValidationResult.INVALID
-            }
-        } else {
-            ValidationResult.EMPTY
-        }
-    }
-    private fun castInput(startTimeString: String, endTimeString: String): Result<Pair<Time, Time>> {
-        val startTimeParts = startTimeString.split(":")
-        val endTimeParts = endTimeString.split(":")
-        val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
-            return Result.failure(IllegalArgumentException("Invalid time format"))
-        }
-
-        val (endHour, endMinute) = parseTimeParts(endTimeParts) ?: run {
-            return Result.failure(IllegalArgumentException("Invalid time format"))
-        }
-        return Result.success(Time(startHour, startMinute) to Time(endHour, endMinute))
+    private fun parseTime(timeString: String): Time? {
+        val parts = timeString.split(":")
+        val hour = parts[0].toIntOrNull() ?: return null
+        val minute = parts[1].toIntOrNull() ?: return null
+        return Time(hour, minute)
     }
     private suspend fun tryInsertTimeRange(start: Time, end: Time) : InsertionResult {
         val conflicts = withContext(Dispatchers.IO) {
@@ -132,8 +112,11 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             return InsertionResult.CONFLICT
         }
     }
-    enum class ValidationResult {
-        VALID, INVALID, EMPTY
+    sealed class TimeInputResult {
+        data class Success(val start: Time, val end: Time) : TimeInputResult()
+        object Empty : TimeInputResult()
+        object InvalidFormat : TimeInputResult()
+        object StartAfterEnd : TimeInputResult() // 開始時間が終了時間より後
     }
     enum class InsertionResult {
         SUCCESS, CONFLICT
