@@ -3,7 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp" android:orientation="horizontal"> <!-- 少し余白を入れると綺麗になります -->
+        android:padding="16dp" android:orientation="vertical">
 
     <ScrollView
             android:layout_width="match_parent"
@@ -12,7 +12,7 @@
                 android:id="@+id/settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"> <!-- 横(horizontal)から縦(vertical)に変更 -->
+                android:orientation="vertical">
             <Space
                     android:layout_width="match_parent"
                     android:layout_height="100dp"/>
