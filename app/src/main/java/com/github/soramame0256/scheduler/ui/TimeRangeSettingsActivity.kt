@@ -63,6 +63,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                     }
                     update()
                 }
+            } else {
+                showToast(R.string.emptyInput)
             }
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
