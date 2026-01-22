@@ -1,11 +1,12 @@
 package com.github.soramame0256.scheduler.ui.timerange
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.github.soramame0256.scheduler.databinding.TimeRangeRecyclerListBinding
+import com.github.soramame0256.scheduler.model.TimeRange
 
-class TimeRangeViewHolder(item: View) : RecyclerView.ViewHolder(item){
-    val binding = TimeRangeRecyclerListBinding.bind(item)
-    val range = binding.timeRange
-    val deleteButton = binding.deleteButton
+class TimeRangeViewHolder(private val binding: TimeRangeRecyclerListBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(timeRange: TimeRange, onClick: (TimeRange) -> Unit) {
+        binding.timeRange.text = timeRange.toString()
+        binding.deleteButton.setOnClickListener { onClick(timeRange) }
+    }
 }
