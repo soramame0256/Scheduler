@@ -97,6 +97,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     private fun validate(startTimeString: String, endTimeString: String) : ValidationResult {
         return if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
             if (timeValidator.matcher(startTimeString).matches() && timeValidator.matcher(endTimeString).matches()) {
+                val (start, end) = castInput(startTimeString, endTimeString).getOrNull() ?: return ValidationResult.INVALID
+                if (start >= end) return ValidationResult.INVALID
                 ValidationResult.VALID
             } else {
                 ValidationResult.INVALID
