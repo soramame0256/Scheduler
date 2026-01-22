@@ -33,24 +33,26 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
 
             if (startTimeString.isNotEmpty() && endTimeString.isNotEmpty()) {
                 if (!timeValidator.matcher(startTimeString).matches() || !timeValidator.matcher(endTimeString).matches()) {
-                    Toast.makeText(
-                        this@TimeRangeSettingsActivity,
-                        this.getText(R.string.invalidTimeRange),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast(R.string.invalidTimeRange)
                     return@setOnClickListener
                 }
                 val startTimeParts = startTimeString.split(":")
                 val endTimeParts = endTimeString.split(":")
+
                 if (startTimeParts.size != 2 || endTimeParts.size != 2) {
-                    Toast.makeText(this@TimeRangeSettingsActivity, this.getText(R.string.invalidTimeRange), Toast.LENGTH_SHORT).show()
+                    showToast(R.string.invalidTimeRange)
                     return@setOnClickListener
                 }
-                // timeValidatorによる入力値制御によりここで数値変換にエラーが起きることはないはず。
-                val startHour = startTimeParts[0].toInt()
-                val startMinute = startTimeParts[1].toInt()
-                val endHour = endTimeParts[0].toInt()
-                val endMinute = endTimeParts[1].toInt()
+                
+                val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
+                    showToast(R.string.invalidInput)
+                    return@setOnClickListener
+                }
+                
+                val (endHour, endMinute) = parseTimeParts(endTimeParts) ?: run {
+                    showToast(R.string.invalidInput)
+                    return@setOnClickListener
+                }
                 val start = Time(startHour, startMinute)
                 val end = Time(endHour, endMinute)
                 lifecycleScope.launch {
@@ -59,9 +61,9 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                     }
                     if (conflicts.isEmpty()) {
                         service.insertTimeRange(start, end)
-                        Toast.makeText(this@TimeRangeSettingsActivity, R.string.timeRangeInsertSuccess, Toast.LENGTH_SHORT).show()
+                        showToast(R.string.timeRangeInsertSuccess)
                     } else {
-                        Toast.makeText(this@TimeRangeSettingsActivity, R.string.time_range_settings_conflict, Toast.LENGTH_SHORT).show()
+                        showToast(R.string.time_range_settings_conflict)
                     }
                     update()
                 }
@@ -93,12 +95,24 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     service.deleteTimeRange(timeRange)
                     update()
-                    // TODO: ここでたまにAndroidRuntimeExceptionが出るので直す。
                 }
             }
             row.addView(deleteButton)
             table.addView(row)
         }
+    }
+
+    private fun showToast(messageResId: Int) {
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun parseTimeParts(timeParts: List<String>): Pair<Int, Int>? {
+        if (timeParts.size != 2) return null
+
+        val hour = timeParts[0].toIntOrNull() ?: return null
+        val minute = timeParts[1].toIntOrNull() ?: return null
+
+        return Pair(hour, minute)
     }
     companion object {
         @JvmStatic
