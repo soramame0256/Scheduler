@@ -39,9 +39,9 @@
                 android:labelFor="@+id/editTextTimeEnd"
         />
         <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <EditText
                     android:id="@+id/editTextTimeEnd"
                     android:layout_width="wrap_content"
