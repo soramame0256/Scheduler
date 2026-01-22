@@ -20,11 +20,22 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     @Inject
     lateinit var service: ScheduleService
     private lateinit var binding: TimeRangeSettingsActivityBinding
+    private lateinit var timeRangeAdapter: TimeRangeRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // RecyclerAdapterの初期化
+        timeRangeAdapter = TimeRangeRecyclerAdapter { timeRange ->
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    service.deleteTimeRange(timeRange)
+                }
+                update()
+            }
+        }
+        binding.trrtablelayout.adapter = timeRangeAdapter
 
         val editTextTimeStart = binding.editTextTimeStart
         val editTextTimeEnd = binding.editTextTimeEnd
@@ -66,14 +77,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         }
 
         withContext(Dispatchers.Main) {
-            binding.trrtablelayout.adapter = TimeRangeRecyclerAdapter(timeRanges) { timeRange ->
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        service.deleteTimeRange(timeRange)
-                    }
-                    update()
-                }
-            }
+            timeRangeAdapter.submitList(timeRanges)
         }
     }
 
