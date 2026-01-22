@@ -20,4 +20,5 @@
     <string name="header_time_range">時間割</string>
     <string name="header_delete">削除</string>
     <string name="emptyInput">入力値が空です</string>
+    <string name="_00_00_00_00"><![CDATA[00:00->00:00]]></string>
 </resources>

@@ -1,9 +1,15 @@
-package com.github.soramame0256.scheduler.ui
+package com.github.soramame0256.scheduler.ui.timerange
 
 import android.os.Bundle
-import android.widget.*
+import android.util.Log
+import android.widget.Button
+import android.widget.TableRow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.databinding.TimeRangeSettingsActivityBinding
 import com.github.soramame0256.scheduler.model.Time
@@ -20,11 +26,13 @@ import javax.inject.Inject
 class TimeRangeSettingsActivity : AppCompatActivity() {
     @Inject
     lateinit var service: ScheduleService
+    private lateinit var binding: TimeRangeSettingsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
-        setContentView(R.layout.time_range_settings_activity)
+        binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
         val editTextTimeStart = binding.editTextTimeStart
         val editTextTimeEnd = binding.editTextTimeEnd
         val addButton = binding.button
@@ -42,12 +50,12 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                 }
                 val startTimeParts = startTimeString.split(":")
                 val endTimeParts = endTimeString.split(":")
-                
+
                 val (startHour, startMinute) = parseTimeParts(startTimeParts) ?: run {
                     showToast(R.string.invalidInput)
                     return@setOnClickListener
                 }
-                
+
                 val (endHour, endMinute) = parseTimeParts(endTimeParts) ?: run {
                     showToast(R.string.invalidInput)
                     return@setOnClickListener
@@ -74,41 +82,20 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
     private suspend fun update() {
+        val timeRanges = withContext(Dispatchers.IO) {
+            service.getAllTimeRanges()
+        }
+        
         withContext(Dispatchers.Main) {
-            val context = this@TimeRangeSettingsActivity
-            val binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
-            val table = binding.trrtablelayout
-            table.removeAllViews()
-            var timeRanges: List<TimeRange>
-            withContext(Dispatchers.IO) {
-                timeRanges = service.getAllTimeRanges()
-            }
-            val row = TableRow(context)
-            val textViewTimeRangeHeader = TextView(context)
-            textViewTimeRangeHeader.text = getString(R.string.header_time_range)
-            row.addView(textViewTimeRangeHeader)
-            val deleteButtonHeader = TextView(context)
-            deleteButtonHeader.text = getString(R.string.header_delete)
-            row.addView(deleteButtonHeader)
-            table.addView(row)
-            timeRanges.forEach { timeRange ->
-                val row = TableRow(context)
-                val textViewTimeRange = TextView(context)
-                textViewTimeRange.text = timeRange.toString()
-                row.addView(textViewTimeRange)
-                val deleteButton = Button(context)
-                deleteButton.text = getString(R.string.header_delete)
-                deleteButton.setOnClickListener {
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            service.deleteTimeRange(timeRange)
-                        }
-                        update()
+            binding.trrtablelayout.adapter = TimeRangeRecyclerAdapter(timeRanges) { timeRange ->
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        service.deleteTimeRange(timeRange)
                     }
+                    update()
                 }
-                row.addView(deleteButton)
-                table.addView(row)
             }
         }
     }

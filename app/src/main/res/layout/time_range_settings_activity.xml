@@ -1,5 +1,5 @@
 <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -62,14 +62,14 @@
                 android:layout_height="wrap_content" android:id="@+id/textView4"
                 android:textSize="24sp" android:textStyle="bold"
                 android:textColor="@color/light_blue_200"/>
-        <TableLayout
+        <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/trrtablelayout"
-                android:stretchColumns="0"
-                android:shrinkColumns="0"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp">
-        </TableLayout>
+                android:paddingEnd="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:nestedScrollingEnabled="false">
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 </ScrollView>

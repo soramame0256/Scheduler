@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31" >
         <activity
-            android:name=".ui.TimeRangeSettingsActivity"
+            android:name=".ui.timerange.TimeRangeSettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_time_range_settings" />
         <activity
