@@ -29,9 +29,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         // RecyclerAdapterの初期化
         timeRangeAdapter = TimeRangeRecyclerAdapter { timeRange ->
             lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    service.deleteTimeRange(timeRange)
-                }
+                service.deleteTimeRange(timeRange)
                 update()
             }
         }
@@ -66,9 +64,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     }
 
     private suspend fun update() {
-        val timeRanges = withContext(Dispatchers.IO) {
-            service.getAllTimeRanges()
-        }
+        val timeRanges = service.getAllTimeRanges()
+
 
         withContext(Dispatchers.Main) {
             timeRangeAdapter.submitList(timeRanges)
@@ -100,13 +97,9 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         return Time(hour, minute)
     }
     private suspend fun tryInsertTimeRange(start: Time, end: Time) : InsertionResult {
-        val conflicts = withContext(Dispatchers.IO) {
-            service.countConflicts(start, end)
-        }
+        val conflicts = service.countConflicts(start, end)
         if (conflicts == 0) {
-            withContext(Dispatchers.IO) {
-                service.insertTimeRange(start, end)
-            }
+            service.insertTimeRange(start, end)
             return InsertionResult.SUCCESS
         } else {
             return InsertionResult.CONFLICT
