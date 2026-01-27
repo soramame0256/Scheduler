@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.github.soramame0256.scheduler.databinding.TimeRangeRecyclerListBinding
 import com.github.soramame0256.scheduler.model.TimeRange
 
-class TimeRangeRecyclerAdapter(val onClick: (TimeRange) -> Unit) : ListAdapter<TimeRange, TimeRangeViewHolder>(DiffCallback) {
+class TimeRangeRecyclerAdapter(private val onClick: (TimeRange) -> Unit) : ListAdapter<TimeRange, TimeRangeViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeRangeViewHolder {
         val binding = TimeRangeRecyclerListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TimeRangeViewHolder(binding)
