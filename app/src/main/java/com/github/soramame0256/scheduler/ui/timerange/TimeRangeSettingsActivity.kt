@@ -228,12 +228,7 @@ private fun InteractiveTimePickerBox(
             onValueChange = { },
             modifier = Modifier.fillMaxWidth(),
             label = label,
-            enabled = false,
-            colors = OutlinedTextFieldDefaults.colors(
-                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledBorderColor = MaterialTheme.colorScheme.outline,
-                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            readOnly = true
         )
     }
 
