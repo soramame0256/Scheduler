@@ -2,35 +2,44 @@ package com.github.soramame0256.scheduler.ui.timerange
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.databinding.TimeRangeSettingsActivityBinding
 import com.github.soramame0256.scheduler.model.Time
-import com.github.soramame0256.scheduler.service.ScheduleService
+import com.github.soramame0256.scheduler.model.TimeRange
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
-import javax.inject.Inject
 
+/*
+後でJetpack Composeに書き換え
+ */
 @AndroidEntryPoint
 class TimeRangeSettingsActivity : AppCompatActivity() {
-    @Inject
-    lateinit var service: ScheduleService
     private lateinit var binding: TimeRangeSettingsActivityBinding
     private lateinit var timeRangeAdapter: TimeRangeRecyclerAdapter
 
+    private val viewModel : TimeRangeSettingsViewModel by viewModels()
+    private lateinit var events : SharedFlow<UiEvent>
+    private lateinit var timeRanges : StateFlow<List<TimeRange>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        events = viewModel.events
+        timeRanges = viewModel.timeRanges
         binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // RecyclerAdapterの初期化
         timeRangeAdapter = TimeRangeRecyclerAdapter { timeRange ->
             lifecycleScope.launch {
-                service.deleteTimeRange(timeRange)
-                update()
+                viewModel.delete(timeRange)
             }
         }
         binding.trrtablelayout.adapter = timeRangeAdapter
@@ -38,38 +47,49 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val editTextTimeStart = binding.editTextTimeStart
         val editTextTimeEnd = binding.editTextTimeEnd
         val addButton = binding.button
+        viewModel.load()
+        
+        // UiEventの処理
         lifecycleScope.launch {
-            update()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.timeRanges
+                    .collect { list ->
+                        timeRangeAdapter.submitList(list)
+                    }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events
+                    .collect { event ->
+                        when (event) {
+                            is UiEvent.Message -> {
+                                val resId = when (event.id) {
+                                    MessageId.InsertSuccess -> R.string.time_range_insert_success
+                                    MessageId.Conflict -> R.string.time_range_settings_conflict
+                                    MessageId.StartAfterEnd -> R.string.start_time_later_than_end
+                                }
+                                Toast.makeText(this@TimeRangeSettingsActivity, resId, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+            }
         }
         addButton.setOnClickListener {
            val parsed = parseAndValidateInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
             when (parsed) {
                 is TimeInputResult.Empty -> showToast(R.string.empty_input)
                 is TimeInputResult.InvalidFormat -> showToast(R.string.invalid_input)
-                is TimeInputResult.StartAfterEnd -> showToast(R.string.start_time_later_than_end)
                 is TimeInputResult.Success -> {
                     val (start, end) = parsed
                     lifecycleScope.launch {
-                        val insertionResult = tryInsertTimeRange(start, end)
-                        when (insertionResult) {
-                            InsertionResult.SUCCESS -> showToast(R.string.time_range_insert_success)
-                            InsertionResult.CONFLICT -> showToast(R.string.time_range_settings_conflict)
-                        }
-                        update()
+                        viewModel.add(start, end)
                     }
                 }
             }
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private suspend fun update() {
-        val timeRanges = service.getAllTimeRanges()
-
-
-        withContext(Dispatchers.Main) {
-            timeRangeAdapter.submitList(timeRanges)
-        }
     }
 
     private fun showToast(messageResId: Int) {
@@ -85,8 +105,6 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val start = parseTime(startTimeString) ?: return TimeInputResult.InvalidFormat
         val end = parseTime(endTimeString) ?: return TimeInputResult.InvalidFormat
 
-        if (start >= end) return TimeInputResult.StartAfterEnd
-
         return TimeInputResult.Success(start, end)
     }
 
@@ -96,23 +114,10 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val minute = parts[1].toIntOrNull() ?: return null
         return Time(hour, minute)
     }
-    private suspend fun tryInsertTimeRange(start: Time, end: Time) : InsertionResult {
-        val conflicts = service.countConflicts(start, end)
-        if (conflicts == 0) {
-            service.insertTimeRange(start, end)
-            return InsertionResult.SUCCESS
-        } else {
-            return InsertionResult.CONFLICT
-        }
-    }
     sealed class TimeInputResult {
         data class Success(val start: Time, val end: Time) : TimeInputResult()
         object Empty : TimeInputResult()
         object InvalidFormat : TimeInputResult()
-        object StartAfterEnd : TimeInputResult() // 開始時間が終了時間より後
-    }
-    enum class InsertionResult {
-        SUCCESS, CONFLICT
     }
     companion object {
         @JvmStatic
