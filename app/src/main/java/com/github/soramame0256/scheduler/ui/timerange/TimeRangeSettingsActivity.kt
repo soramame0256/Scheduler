@@ -92,7 +92,7 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
                 style = MaterialTheme.typography.titleLarge
             )
             LazyColumn(
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp).weight(1f)
             ) {
                 items(timeRanges, key = { it.id }) { timeRange ->
                     TimeRangeItem(
