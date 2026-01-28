@@ -24,6 +24,11 @@ class TimeRangeSettingsViewModel @Inject constructor(
     private val _events = MutableStateFlow<EventWrapper<UiEvent>>(EventWrapper(UiEvent.NoOperation()))
     val events: StateFlow<EventWrapper<UiEvent>> = _events
 
+    private val _startTime = MutableStateFlow(Time(0, 0))
+    val startTime: StateFlow<Time> = _startTime
+    private val _endTime = MutableStateFlow(Time(0, 0))
+    val endTime: StateFlow<Time> = _endTime
+
     fun load() = viewModelScope.launch {
         _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
     }
@@ -41,6 +46,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
         val conflicts = service.countConflicts(start, end)
         if (conflicts == 0) {
             val newTimeRange = service.insertTimeRange(start, end)
+            resetInputTimes()
             _timeRanges.update { currentList ->
                 val newList = currentList.toMutableList()
                 // 適切な位置に挿入
@@ -54,29 +60,28 @@ class TimeRangeSettingsViewModel @Inject constructor(
             _events.value = EventWrapper(UiEvent.Message(MessageId.Conflict))
         }
     }
+    fun updateStartTime(newTime: Time) {
+        _startTime.value = newTime
+    }
+
+    fun updateEndTime(newTime: Time) {
+        _endTime.value = newTime
+    }
+
+    fun resetInputTimes() {
+        _startTime.value = Time(0, 0)
+        _endTime.value = Time(0, 0)
+    }
+
 }
 class EventWrapper<out T>(private val event: T) {
     var handled = false
         private set
-    fun getContent(): ContentResult {
-        if (!handled) {
-            handled = true
-            return ContentResult.Success(event)
-        } else {
-            return ContentResult.AlreadyHandled()
-        }
-    }
     fun handle(block: (T) -> Unit) {
         if (!handled) {
             handled = true
             block(event)
         }
-    }
-
-    fun peek(): T = event
-    sealed class ContentResult {
-        data class Success<out T>(val event: T) : ContentResult()
-        class AlreadyHandled() : ContentResult()
     }
 }
 
