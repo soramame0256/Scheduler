@@ -24,10 +24,11 @@ class TimeRangeSettingsViewModel @Inject constructor(
     val events: SharedFlow<UiEvent> = _events
 
     fun load() = viewModelScope.launch {
-        _timeRanges.value = service.getAllTimeRanges()
+        _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
     }
     fun delete(timeRange: TimeRange) = viewModelScope.launch {
         service.deleteTimeRange(timeRange)
+        // filterによる削除のため、startTimeによるソート順序は保持される。
         _timeRanges.value = _timeRanges.value.filterNot { it.id == timeRange.id }
     }
 
