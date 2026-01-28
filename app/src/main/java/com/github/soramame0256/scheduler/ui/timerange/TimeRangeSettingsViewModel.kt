@@ -40,7 +40,12 @@ class TimeRangeSettingsViewModel @Inject constructor(
         val conflicts = service.countConflicts(start, end)
         if (conflicts == 0) {
             val newTimeRange = service.insertTimeRange(start, end)
-            _timeRanges.value = (_timeRanges.value + newTimeRange).sortedBy { it.startTime }
+            val newList = _timeRanges.value.toMutableList()
+            // 適切な位置に挿入
+            val insertionPoint = newList.binarySearchBy(newTimeRange.startTime) { it.startTime }.let { if (it < 0) -(it + 1) else it }
+            newList.add(insertionPoint, newTimeRange)
+
+            _timeRanges.value = newList
             _events.emit(UiEvent.Message(MessageId.InsertSuccess))
         } else {
             _events.emit(UiEvent.Message(MessageId.Conflict))
