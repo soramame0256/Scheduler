@@ -49,15 +49,19 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                     }
                 }
                 launch {
-                    viewModel.events.collect { event ->
-                        when (event) {
-                            is UiEvent.Message -> {
-                                val resId = when (event.id) {
-                                    MessageId.InsertSuccess -> R.string.time_range_insert_success
-                                    MessageId.Conflict -> R.string.time_range_settings_conflict
-                                    MessageId.StartAfterEnd -> R.string.start_time_later_than_end
+                    viewModel.events.collect { eventWrapper ->
+                        eventWrapper.handle { event ->
+                            when (event) {
+                                is UiEvent.Message -> {
+                                    val resId = when (event.id) {
+                                        MessageId.InsertSuccess -> R.string.time_range_insert_success
+                                        MessageId.Conflict -> R.string.time_range_settings_conflict
+                                        MessageId.StartAfterEnd -> R.string.start_time_later_than_end
+                                    }
+                                    Toast.makeText(this@TimeRangeSettingsActivity, resId, Toast.LENGTH_SHORT)
+                                        .show()
                                 }
-                                Toast.makeText(this@TimeRangeSettingsActivity, resId, Toast.LENGTH_SHORT).show()
+                                is UiEvent.NoOperation -> return@handle
                             }
                         }
                     }

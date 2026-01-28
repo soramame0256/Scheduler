@@ -21,8 +21,8 @@ class TimeRangeSettingsViewModel @Inject constructor(
     private val _timeRanges = MutableStateFlow<List<TimeRange>>(emptyList())
     val timeRanges: StateFlow<List<TimeRange>> = _timeRanges
 
-    private val _events = MutableSharedFlow<UiEvent>()
-    val events: SharedFlow<UiEvent> = _events
+    private val _events = MutableStateFlow<EventWrapper<UiEvent>>(EventWrapper(UiEvent.NoOperation()))
+    val events: StateFlow<EventWrapper<UiEvent>> = _events
 
     fun load() = viewModelScope.launch {
         _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
@@ -35,7 +35,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
 
     fun add(start: Time, end: Time) = viewModelScope.launch {
         if (start >= end) {
-            _events.emit(UiEvent.Message(MessageId.StartAfterEnd))
+            _events.value = EventWrapper(UiEvent.Message(MessageId.StartAfterEnd))
             return@launch
         }
         val conflicts = service.countConflicts(start, end)
@@ -44,21 +44,48 @@ class TimeRangeSettingsViewModel @Inject constructor(
             _timeRanges.update { currentList ->
                 val newList = currentList.toMutableList()
                 // 適切な位置に挿入
-                val insertionPoint = newList.binarySearchBy(newTimeRange.startTime) { it.startTime }.let { if (it < 0) -(it + 1) else it }
+                val insertionPoint = newList.binarySearchBy(newTimeRange.startTime) { it.startTime }
+                    .let { if (it < 0) -(it + 1) else it }
                 newList.add(insertionPoint, newTimeRange)
                 newList
             }
-            _events.emit(UiEvent.Message(MessageId.InsertSuccess))
+            _events.value = EventWrapper(UiEvent.Message(MessageId.InsertSuccess))
         } else {
-            _events.emit(UiEvent.Message(MessageId.Conflict))
+            _events.value = EventWrapper(UiEvent.Message(MessageId.Conflict))
         }
+    }
+}
+class EventWrapper<out T>(private val event: T) {
+    var handled = false
+        private set
+    fun getContent(): ContentResult {
+        if (!handled) {
+            handled = true
+            return ContentResult.Success(event)
+        } else {
+            return ContentResult.AlreadyHandled()
+        }
+    }
+    fun handle(block: (T) -> Unit) {
+        if (!handled) {
+            handled = true
+            block(event)
+        }
+    }
+
+    fun peek(): T = event
+    sealed class ContentResult {
+        data class Success<out T>(val event: T) : ContentResult()
+        class AlreadyHandled() : ContentResult()
     }
 }
 
 sealed class UiEvent {
     data class Message(val id: MessageId) : UiEvent()
+    class NoOperation : UiEvent()
 }
 
 enum class MessageId {
     InsertSuccess, Conflict, StartAfterEnd
 }
+
