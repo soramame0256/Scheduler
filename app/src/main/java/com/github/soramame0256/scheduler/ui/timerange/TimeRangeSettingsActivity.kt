@@ -83,7 +83,7 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
                 endTime = endTime,
                 onStartTimeChange = { viewModel.updateStartTime(it) },
                 onEndTimeChange = { viewModel.updateEndTime(it) },
-                onAdd = { start, end -> viewModel.add(start, end) }
+                onAdd = { viewModel.add(startTime, endTime) }
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
             Text(
@@ -111,7 +111,7 @@ private fun TimeRangeInput(
     endTime: Time,
     onStartTimeChange: (Time) -> Unit,
     onEndTimeChange: (Time) -> Unit,
-    onAdd: (Time, Time) -> Unit,
+    onAdd: () -> Unit,
 ) {
     var pickerDialogTarget by remember { mutableStateOf(NONE) }
     Column {
@@ -165,7 +165,7 @@ private fun TimeRangeInput(
         Button(
             onClick = {
                 pickerDialogTarget = NONE
-                onAdd(startTime, endTime)
+                onAdd()
             },
             modifier = Modifier
                 .fillMaxWidth()
