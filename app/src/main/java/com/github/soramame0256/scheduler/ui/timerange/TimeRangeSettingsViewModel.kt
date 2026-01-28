@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
     fun delete(timeRange: TimeRange) = viewModelScope.launch {
         service.deleteTimeRange(timeRange)
         // filterによる削除のため、startTimeによるソート順序は保持される。
-        _timeRanges.value = _timeRanges.value.filterNot { it.id == timeRange.id }
+        _timeRanges.update { currentList -> currentList.filterNot { it.id == timeRange.id } }
     }
 
     fun add(start: Time, end: Time) = viewModelScope.launch {
@@ -40,12 +41,13 @@ class TimeRangeSettingsViewModel @Inject constructor(
         val conflicts = service.countConflicts(start, end)
         if (conflicts == 0) {
             val newTimeRange = service.insertTimeRange(start, end)
-            val newList = _timeRanges.value.toMutableList()
-            // 適切な位置に挿入
-            val insertionPoint = newList.binarySearchBy(newTimeRange.startTime) { it.startTime }.let { if (it < 0) -(it + 1) else it }
-            newList.add(insertionPoint, newTimeRange)
-
-            _timeRanges.value = newList
+            _timeRanges.update { currentList ->
+                val newList = currentList.toMutableList()
+                // 適切な位置に挿入
+                val insertionPoint = newList.binarySearchBy(newTimeRange.startTime) { it.startTime }.let { if (it < 0) -(it + 1) else it }
+                newList.add(insertionPoint, newTimeRange)
+                newList
+            }
             _events.emit(UiEvent.Message(MessageId.InsertSuccess))
         } else {
             _events.emit(UiEvent.Message(MessageId.Conflict))
