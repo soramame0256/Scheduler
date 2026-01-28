@@ -7,8 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -150,14 +148,14 @@ private fun TimeRangeInput(
                     activeTime = when (pickerDialogTarget) {
                         START -> startTime
                         END -> endTime
-                        else -> error("Invalid pickerDialogTarget!") // 起こりえない
+                        NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here") // 起こりえない
                     },
                     onDismiss = { pickerDialogTarget = NONE },
                     onConfirm = { time ->
                         when (pickerDialogTarget) {
                             START -> onStartTimeChange(time)
                             END -> onEndTimeChange(time)
-                            else -> error("Invalid pickerDialogTarget!")
+                            NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here")
                         }
                         pickerDialogTarget = NONE
                     }
