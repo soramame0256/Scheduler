@@ -2,6 +2,7 @@ package com.github.soramame0256.scheduler.service
 
 import com.github.soramame0256.scheduler.model.Schedule
 import com.github.soramame0256.scheduler.model.Time
+import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.model.Weekday
 
 /**
@@ -12,4 +13,5 @@ interface ScheduleReader {
     suspend fun getSchedulesAtTime(time: Time): List<Schedule>
     suspend fun getScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule>
     suspend fun getNextScheduleAtTimeAndWeekday(time: Time, weekday: Weekday): Result<Schedule>
+    suspend fun countConflictSchedules(weekday: Weekday, timeRange: TimeRange): Int
 }
