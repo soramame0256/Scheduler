@@ -95,9 +95,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     private fun parseAndValidateInput(startTimeString: String, endTimeString: String): TimeInputResult {
         if (startTimeString.isEmpty() || endTimeString.isEmpty()) return TimeInputResult.Empty
 
-        if (!timeValidator.matcher(startTimeString).matches() ||
-            !timeValidator.matcher(endTimeString).matches()) return TimeInputResult.InvalidFormat
-
+        if (!timeValidator.matches(startTimeString) ||
+            !timeValidator.matches(endTimeString)) return TimeInputResult.InvalidFormat
         val start = parseTime(startTimeString)
         val end = parseTime(endTimeString)
 
@@ -117,6 +116,6 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     }
     companion object {
         @JvmStatic
-        val timeValidator: Pattern = Pattern.compile("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")
+        val timeValidator = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex()
     }
 }
