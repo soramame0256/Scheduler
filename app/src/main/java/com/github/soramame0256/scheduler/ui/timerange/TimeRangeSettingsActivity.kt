@@ -261,7 +261,7 @@ private fun TimeRangeItem(timeRange: TimeRange, onDelete: () -> Unit) {
         Text(
             text = timeRange.toString(),
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
+            modifier = Modifier.weight(weight = 1f)
         )
         Button(onClick = onDelete) {
             Text(text = stringResource(id = R.string.header_delete))
