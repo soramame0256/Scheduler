@@ -5,5 +5,5 @@ import com.github.soramame0256.scheduler.model.TimeRange
 
 interface TimeRangeReader {
     suspend fun getAllTimeRanges(): List<TimeRange>
-    suspend fun countConflicts(start: Time, end: Time): Int
+    suspend fun countConflictTimeRanges(start: Time, end: Time): Int
 }

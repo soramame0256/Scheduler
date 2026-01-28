@@ -42,7 +42,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
             _events.value = EventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.StartAfterEnd))
             return@launch
         }
-        val conflicts = service.countConflicts(start, end)
+        val conflicts = service.countConflictTimeRanges(start, end)
         if (conflicts == 0) {
             val newTimeRange = service.insertTimeRange(start, end)
             resetInputTimes()
