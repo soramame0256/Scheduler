@@ -28,7 +28,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
     }
     fun delete(timeRange: TimeRange) = viewModelScope.launch {
         service.deleteTimeRange(timeRange)
-        load()
+        _timeRanges.value = _timeRanges.value.filterNot { it.id == timeRange.id }
     }
 
     fun add(start: Time, end: Time) = viewModelScope.launch {
@@ -38,9 +38,9 @@ class TimeRangeSettingsViewModel @Inject constructor(
         }
         val conflicts = service.countConflicts(start, end)
         if (conflicts == 0) {
-            service.insertTimeRange(start, end)
+            val newTimeRange = service.insertTimeRange(start, end)
+            _timeRanges.value = (_timeRanges.value + newTimeRange).sortedBy { it.startTime }
             _events.emit(UiEvent.Message(MessageId.InsertSuccess))
-            load()
         } else {
             _events.emit(UiEvent.Message(MessageId.Conflict))
         }
