@@ -58,25 +58,11 @@ class TimeRangeSettingsViewModel @Inject constructor(
 class EventWrapper<out T>(private val event: T) {
     var handled = false
         private set
-    fun getContent(): ContentResult {
-        if (!handled) {
-            handled = true
-            return ContentResult.Success(event)
-        } else {
-            return ContentResult.AlreadyHandled()
-        }
-    }
     fun handle(block: (T) -> Unit) {
         if (!handled) {
             handled = true
             block(event)
         }
-    }
-
-    fun peek(): T = event
-    sealed class ContentResult {
-        data class Success<out T>(val event: T) : ContentResult()
-        class AlreadyHandled() : ContentResult()
     }
 }
 

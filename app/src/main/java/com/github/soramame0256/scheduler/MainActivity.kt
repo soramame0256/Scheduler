@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     content = {
                         val context = LocalContext.current
                         Button(onClick = {
-                            startActivity(Intent(context, TimeRangeSettingsActivity::class.java))
+                            context.startActivity(Intent(context, TimeRangeSettingsActivity::class.java))
                         }, modifier = Modifier.padding(it).fillMaxWidth()) {
                             Text(text = "Time Range Settings")
                         }
