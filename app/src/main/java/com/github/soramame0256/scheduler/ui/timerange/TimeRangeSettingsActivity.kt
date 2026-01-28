@@ -232,21 +232,20 @@ private fun InteractiveTimePickerBox(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
+        LaunchedEffect(interactionSource) {
+            interactionSource.interactions.collect {
+                if (it is PressInteraction.Release) {
+                    onClick()
+                }
+            }
+        }
         OutlinedTextField(
             value = shownValue,
             onValueChange = { },
             readOnly = true,
             label = label,
-            interactionSource = remember { MutableInteractionSource() }
-                .also { interactionSource ->
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect {
-                            if (it is PressInteraction.Release) {
-                                onClick()
-                            }
-                        }
-                    }
-                }
+            interactionSource = interactionSource
         )
     }
 
