@@ -114,9 +114,12 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+
         ) {
             InteractiveTimePickerBox(
+                modifier = Modifier.weight(weight = 1f),
                 onInteract = { interactionSource ->
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
@@ -131,6 +134,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                 shownValue = startTime.toString()
             )
             InteractiveTimePickerBox(
+                modifier = Modifier.weight(weight = 1f),
                 onInteract = { interactionSource ->
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
@@ -215,11 +219,13 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InteractiveTimePickerBox(
+    modifier: Modifier = Modifier,
     onInteract: @Composable (MutableInteractionSource) -> Unit,
     label: @Composable () -> Unit,
     shownValue: String
 ){
     Box(
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         OutlinedTextField(
