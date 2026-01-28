@@ -192,8 +192,8 @@ private fun TimePickerDialogWrapper(
         initialMinute = activeTime.minute,
         is24Hour = true
     )
-    TimePickerDialog(
-        onDismissRequest = { onDismiss() },
+    AlertDialog(
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = {
                 val time = Time(timePickerState.hour, timePickerState.minute)
@@ -203,13 +203,14 @@ private fun TimePickerDialogWrapper(
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(R.string.cancel))
             }
+        },
+        text = {
+            TimePicker(state = timePickerState)
         }
-    ) {
-        TimePicker(state = timePickerState)
-    }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -232,21 +233,6 @@ private fun InteractiveTimePickerBox(
         )
     }
 
-}
-
-@Composable
-private fun TimePickerDialog(
-    onDismissRequest: () -> Unit,
-    confirmButton: @Composable () -> Unit,
-    dismissButton: @Composable () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        confirmButton = confirmButton,
-        dismissButton = dismissButton,
-        text = content
-    )
 }
 
 @Composable
