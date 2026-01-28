@@ -102,7 +102,7 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
-    var pickerDialogTarget by remember { mutableStateOf(PickerDialogTarget.NONE) }
+    var pickerDialogTarget by remember { mutableStateOf(NONE) }
     var endTime: Time by remember { mutableStateOf(Time(0, 0)) }
     var startTime: Time by remember { mutableStateOf(Time(0, 0)) }
 
@@ -121,28 +121,16 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
         ) {
             InteractiveTimePickerBox(
                 modifier = Modifier.weight(weight = 1f),
-                onInteract = { interactionSource ->
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect {
-                            if (it is PressInteraction.Release) {
-                                pickerDialogTarget = PickerDialogTarget.START
-                            }
-                        }
-                    }
+                onClick = {
+                    pickerDialogTarget = START
                 },
                 label = { Text(text = stringResource(R.string.time_range_settings_starttime_in)) },
                 shownValue = startTime.toString()
             )
             InteractiveTimePickerBox(
                 modifier = Modifier.weight(weight = 1f),
-                onInteract = { interactionSource ->
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect {
-                            if (it is PressInteraction.Release) {
-                                pickerDialogTarget = PickerDialogTarget.END
-                            }
-                        }
-                    }
+                onClick = {
+                    pickerDialogTarget = END
                 },
                 label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
                 shownValue = endTime.toString()
@@ -206,7 +194,7 @@ private enum class PickerDialogTarget {
 @Composable
 private fun InteractiveTimePickerBox(
     modifier: Modifier = Modifier,
-    onInteract: @Composable (MutableInteractionSource) -> Unit,
+    onClick: () -> Unit,
     label: @Composable () -> Unit,
     shownValue: String
 ){
@@ -221,7 +209,13 @@ private fun InteractiveTimePickerBox(
             label = label,
             interactionSource = remember { MutableInteractionSource() }
                 .also { interactionSource ->
-                    onInteract(interactionSource)
+                    LaunchedEffect(interactionSource) {
+                    interactionSource.interactions.collect {
+                        if (it is PressInteraction.Release) {
+                            onClick()
+                        }
+                    }
+                }
                 }
         )
     }
