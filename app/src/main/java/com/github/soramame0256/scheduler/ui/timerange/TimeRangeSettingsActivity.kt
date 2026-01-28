@@ -143,7 +143,6 @@ private fun TimeRangeInput(
                 label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
                 shownValue = endTime.toString()
             )
-
         }
         if (pickerDialogTarget != NONE) {
             TimePickerDialogWrapper(
@@ -230,7 +229,13 @@ private fun InteractiveTimePickerBox(
             onValueChange = { },
             modifier = Modifier.fillMaxWidth(),
             label = label,
-            readOnly = true
+            readOnly = true,
+            enabled = false,
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
     }
 
