@@ -24,4 +24,5 @@
     <string name="start_time_later_than_end">開始時刻が終了時刻より後です</string>
     <string name="cancel">キャンセル</string>
     <string name="ok">OK</string>
+    <string name="title_activity_schedule_settings">ScheduleSettingsActivity</string>
 </resources>
