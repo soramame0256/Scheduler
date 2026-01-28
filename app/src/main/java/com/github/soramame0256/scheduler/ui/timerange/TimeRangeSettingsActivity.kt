@@ -49,8 +49,8 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
     val context = LocalContext.current
     val timeRanges by viewModel.timeRanges.collectAsState()
     val events by viewModel.events.collectAsState()
-    var startTime by remember { mutableStateOf(Time(0, 0)) }
-    var endTime by remember { mutableStateOf(Time(0, 0)) }
+    val startTime by viewModel.startTime.collectAsState()
+    val endTime by viewModel.endTime.collectAsState()
     // イベントのハンドリング
     LaunchedEffect(events) {
         events.handle { event ->
@@ -58,14 +58,7 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
 
             if (event is UiEvent.Message) {
                 val resId = when (event.id) {
-                    MessageId.InsertSuccess -> {
-                        // 入力値のリセット
-                        startTime = Time(0, 0)
-                        endTime = Time(0, 0)
-
-                        R.string.time_range_insert_success
-                    }
-
+                    MessageId.InsertSuccess -> R.string.time_range_insert_success
                     MessageId.Conflict -> R.string.time_range_settings_conflict
                     MessageId.StartAfterEnd -> R.string.start_time_later_than_end
                 }
@@ -89,8 +82,8 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
             TimeRangeInput(
                 startTime = startTime,
                 endTime = endTime,
-                onStartTimeChange = { startTime = it },
-                onEndTimeChange = { endTime = it },
+                onStartTimeChange = { viewModel.updateStartTime(it) },
+                onEndTimeChange = { viewModel.updateEndTime(it) },
                 onAdd = { start, end -> viewModel.add(start, end) }
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
