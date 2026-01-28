@@ -98,16 +98,16 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         if (!timeValidator.matcher(startTimeString).matches() ||
             !timeValidator.matcher(endTimeString).matches()) return TimeInputResult.InvalidFormat
 
-        val start = parseTime(startTimeString) ?: return TimeInputResult.InvalidFormat
-        val end = parseTime(endTimeString) ?: return TimeInputResult.InvalidFormat
+        val start = parseTime(startTimeString)
+        val end = parseTime(endTimeString)
 
         return TimeInputResult.Success(start, end)
     }
 
-    private fun parseTime(timeString: String): Time? {
+    private fun parseTime(timeString: String): Time {
         val parts = timeString.split(":")
-        val hour = parts[0].toIntOrNull() ?: return null
-        val minute = parts[1].toIntOrNull() ?: return null
+        val hour = parts[0].toInt()
+        val minute = parts[1].toInt()
         return Time(hour, minute)
     }
     sealed class TimeInputResult {
