@@ -7,5 +7,6 @@ data class Time(val hour: Int, val minute: Int): Comparable<Time> {
     }
 
     fun toIntegerRepresentation() = hour * 100 + minute
+    override fun toString() = "%02d:%02d".format(hour, minute)
     override fun compareTo(other: Time): Int = this.toIntegerRepresentation().compareTo(other.toIntegerRepresentation())
 }

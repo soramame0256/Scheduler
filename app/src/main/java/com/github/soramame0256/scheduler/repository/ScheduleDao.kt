@@ -53,4 +53,7 @@ interface ScheduleDao {
 
     @Query("SELECT * FROM time_range WHERE timetableId = :id")
     suspend fun getTimeRangeById(id: Long): TimeRangeEntity?
+
+    @Query("SELECT COUNT(*) FROM time_range WHERE :start < endTime AND start < :end")
+    suspend fun countConflicts(start: Time, end: Time): Int
 }

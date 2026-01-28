@@ -6,4 +6,20 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="no_schedule">現在の予定はありません。</string>
     <string name="no_next_schedule">☆☆☆本日は終了しました☆☆☆</string>
+    <string name="title_activity_time_range_settings">時間割設定</string>
+    <string name="add">追加</string>
+    <string name="_00_00">00:00</string>
+    <string name="time_range_settings_starttime_in">開始時刻</string>
+    <string name="time_range_settings_endtime_in">終了時間</string>
+    <string name="time_range_insert_success">追加しました!</string>
+    <string name="time_range_settings_conflict">競合する値が存在します!</string>
+    <string name="invalid_input">入力値が正しくありません!</string>
+    <!-- time_range_settings_category_addとaddは少し意味が異なるので棲み分け -->
+    <string name="time_range_settings_category_add">追加</string>
+    <string name="time_range_settings_category_remove">削除</string>
+    <string name="header_time_range">時間割</string>
+    <string name="header_delete">削除</string>
+    <string name="empty_input">入力値が空です</string>
+    <string name="time_range_placeholder"><![CDATA[00:00->00:00]]></string>
+    <string name="start_time_later_than_end">開始時刻が終了時刻より後です</string>
 </resources>
