@@ -26,14 +26,10 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     private lateinit var timeRangeAdapter: TimeRangeRecyclerAdapter
 
     private val viewModel : TimeRangeSettingsViewModel by viewModels()
-    private lateinit var events : SharedFlow<UiEvent>
-    private lateinit var timeRanges : StateFlow<List<TimeRange>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        events = viewModel.events
-        timeRanges = viewModel.timeRanges
         binding = TimeRangeSettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // RecyclerAdapterの初期化
