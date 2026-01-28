@@ -152,7 +152,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                         }
                     }
                 },
-                label = { Text(text = "開始時間を選択") },
+                label = { Text(text = stringResource(R.string.time_range_settings_starttime_in)) },
                 pickerState = startTimePickerState
             )
             InteractiveTimePickerBox(
@@ -166,7 +166,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                         }
                     }
                 },
-                label = { Text(text = "終了時間を選択") },
+                label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
                 pickerState = endTimePickerState
             )
             if (showStartTimePicker) {
