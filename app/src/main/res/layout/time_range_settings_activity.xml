@@ -1,22 +1,20 @@
-<ScrollView
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <LinearLayout
             android:id="@+id/settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="100dp"/>
         <TextView
                 android:text="@string/time_range_settings_category_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView"
                 android:textSize="24sp" android:textStyle="bold"
-                android:textColor="@color/light_blue_200"/>
+                android:textColor="@color/light_blue_200" android:paddingTop="100dp"/>
         <TextView
                 android:text="@string/time_range_settings_starttime_in"
                 android:layout_width="match_parent"
@@ -62,14 +60,14 @@
                 android:layout_height="wrap_content" android:id="@+id/textView4"
                 android:textSize="24sp" android:textStyle="bold"
                 android:textColor="@color/light_blue_200"/>
-        <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/trrtablelayout"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:nestedScrollingEnabled="false">
-        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
-</ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/trrtablelayout"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>
