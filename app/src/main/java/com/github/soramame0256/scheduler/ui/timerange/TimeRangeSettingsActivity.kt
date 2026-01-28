@@ -143,24 +143,25 @@ private fun TimeRangeInput(
                 label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
                 shownValue = endTime.toString()
             )
-            if (pickerDialogTarget != NONE) {
-                TimePickerDialogWrapper(
-                    activeTime = when (pickerDialogTarget) {
-                        START -> startTime
-                        END -> endTime
-                        NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here") // 起こりえない
-                    },
-                    onDismiss = { pickerDialogTarget = NONE },
-                    onConfirm = { time ->
-                        when (pickerDialogTarget) {
-                            START -> onStartTimeChange(time)
-                            END -> onEndTimeChange(time)
-                            NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here")
-                        }
-                        pickerDialogTarget = NONE
+
+        }
+        if (pickerDialogTarget != NONE) {
+            TimePickerDialogWrapper(
+                activeTime = when (pickerDialogTarget) {
+                    START -> startTime
+                    END -> endTime
+                    NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here") // 起こりえない
+                },
+                onDismiss = { pickerDialogTarget = NONE },
+                onConfirm = { time ->
+                    when (pickerDialogTarget) {
+                        START -> onStartTimeChange(time)
+                        END -> onEndTimeChange(time)
+                        NONE -> throw IllegalStateException("PickerDialogTarget.NONE should not be active here")
                     }
-                )
-            }
+                    pickerDialogTarget = NONE
+                }
+            )
         }
         Button(
             onClick = {
