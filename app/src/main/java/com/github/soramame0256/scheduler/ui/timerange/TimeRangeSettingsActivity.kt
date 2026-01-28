@@ -23,6 +23,7 @@ import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.ui.theme.SchedulerTheme
+import com.github.soramame0256.scheduler.ui.timerange.PickerDialogTarget.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -101,10 +102,10 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
-    var showStartTimePicker by remember { mutableStateOf(false) }
-    var showEndTimePicker by remember { mutableStateOf(false) }
+    var pickerDialogTarget by remember { mutableStateOf(PickerDialogTarget.NONE) }
     var endTime: Time by remember { mutableStateOf(Time(0, 0)) }
     var startTime: Time by remember { mutableStateOf(Time(0, 0)) }
+
     Column {
         Text(
             text = stringResource(id = R.string.time_range_settings_category_add),
@@ -124,8 +125,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Release) {
-                                showStartTimePicker = true
-                                showEndTimePicker = false
+                                pickerDialogTarget = PickerDialogTarget.START
                             }
                         }
                     }
@@ -139,8 +139,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Release) {
-                                showStartTimePicker = false
-                                showEndTimePicker = true
+                                pickerDialogTarget = PickerDialogTarget.END
                             }
                         }
                     }
@@ -148,49 +147,34 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                 label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
                 shownValue = endTime.toString()
             )
-            if (showStartTimePicker) {
+            if (pickerDialogTarget != NONE) {
+                val activeTime = when (pickerDialogTarget) {
+                    START -> startTime
+                    END -> endTime
+                    else -> error("Invalid pickerDialogTarget!") // 起こりえない
+                }
                 val timePickerState = rememberTimePickerState(
-                    initialHour = startTime.hour,
-                    initialMinute = startTime.minute,
+                    initialHour = activeTime.hour,
+                    initialMinute = activeTime.minute,
                     is24Hour = true
                 )
 
                 TimePickerDialog(
-                    onDismissRequest = { showStartTimePicker = false },
+                    onDismissRequest = { pickerDialogTarget = NONE },
                     confirmButton = {
                         TextButton(onClick = {
-                            showStartTimePicker = false
-                            startTime = Time(timePickerState.hour, timePickerState.minute)
+                            when (pickerDialogTarget) {
+                                START -> startTime = Time(timePickerState.hour, timePickerState.minute)
+                                END -> endTime = Time(timePickerState.hour, timePickerState.minute)
+                                else -> error("Invalid pickerDialogTarget!")
+                            }
+                            pickerDialogTarget = NONE
                         }) {
                             Text(text = stringResource(R.string.ok))
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = { showStartTimePicker = false }) {
-                            Text(text = stringResource(R.string.cancel))
-                        }
-                    }
-                ) {
-                    TimePicker(state = timePickerState)
-                }
-            } else if (showEndTimePicker) {
-                val timePickerState = rememberTimePickerState(
-                    initialHour = endTime.hour,
-                    initialMinute = endTime.minute,
-                    is24Hour = true
-                )
-                TimePickerDialog(
-                    onDismissRequest = { showEndTimePicker = false },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            showEndTimePicker = false
-                            endTime = Time(timePickerState.hour, timePickerState.minute)
-                        }) {
-                            Text(text = stringResource(R.string.ok))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showEndTimePicker = false }) {
+                        TextButton(onClick = { pickerDialogTarget = NONE }) {
                             Text(text = stringResource(R.string.cancel))
                         }
                     }
@@ -201,8 +185,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
         }
         Button(
             onClick = {
-                showStartTimePicker = false
-                showEndTimePicker = false
+                pickerDialogTarget = NONE
                 onAdd(startTime, endTime)
                 // 入力フィールドをクリア
                 startTime = Time(0, 0)
@@ -215,6 +198,9 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
             Text(stringResource(id = R.string.add))
         }
     }
+}
+private enum class PickerDialogTarget {
+    START, END, NONE
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -239,6 +225,7 @@ private fun InteractiveTimePickerBox(
                 }
         )
     }
+
 }
 @Composable
 private fun TimePickerDialog(
