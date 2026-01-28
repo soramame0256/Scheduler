@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.service.ScheduleService
+import com.github.soramame0256.scheduler.ui.EventWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +20,8 @@ class TimeRangeSettingsViewModel @Inject constructor(
     private val _timeRanges = MutableStateFlow<List<TimeRange>>(emptyList())
     val timeRanges: StateFlow<List<TimeRange>> = _timeRanges
 
-    private val _events = MutableStateFlow<TimeRangeEventWrapper<TimeRangeUiEvent>>(TimeRangeEventWrapper(TimeRangeUiEvent.NoOperation()))
-    val events: StateFlow<TimeRangeEventWrapper<TimeRangeUiEvent>> = _events
+    private val _events = MutableStateFlow<EventWrapper<TimeRangeUiEvent>>(EventWrapper(TimeRangeUiEvent.NoOperation()))
+    val events: StateFlow<EventWrapper<TimeRangeUiEvent>> = _events
 
     private val _startTime = MutableStateFlow(Time(0, 0))
     val startTime: StateFlow<Time> = _startTime
@@ -38,7 +39,7 @@ class TimeRangeSettingsViewModel @Inject constructor(
 
     fun add(start: Time, end: Time) = viewModelScope.launch {
         if (start >= end) {
-            _events.value = TimeRangeEventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.StartAfterEnd))
+            _events.value = EventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.StartAfterEnd))
             return@launch
         }
         val conflicts = service.countConflicts(start, end)
@@ -53,9 +54,9 @@ class TimeRangeSettingsViewModel @Inject constructor(
                 newList.add(insertionPoint, newTimeRange)
                 newList
             }
-            _events.value = TimeRangeEventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.InsertSuccess))
+            _events.value = EventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.InsertSuccess))
         } else {
-            _events.value = TimeRangeEventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.Conflict))
+            _events.value = EventWrapper(TimeRangeUiEvent.Message(TimeRangeInsertMessageId.Conflict))
         }
     }
     fun updateStartTime(newTime: Time) {
@@ -71,16 +72,6 @@ class TimeRangeSettingsViewModel @Inject constructor(
         _endTime.value = Time(0, 0)
     }
 
-}
-class TimeRangeEventWrapper<out T>(private val event: T) {
-    var handled = false
-        private set
-    fun handle(block: (T) -> Unit) {
-        if (!handled) {
-            handled = true
-            block(event)
-        }
-    }
 }
 
 sealed class TimeRangeUiEvent {
