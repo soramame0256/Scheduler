@@ -136,39 +136,22 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                 shownValue = endTime.toString()
             )
             if (pickerDialogTarget != NONE) {
-                val activeTime = when (pickerDialogTarget) {
-                    START -> startTime
-                    END -> endTime
-                    else -> error("Invalid pickerDialogTarget!") // 起こりえない
-                }
-                val timePickerState = rememberTimePickerState(
-                    initialHour = activeTime.hour,
-                    initialMinute = activeTime.minute,
-                    is24Hour = true
-                )
-
-                TimePickerDialog(
-                    onDismissRequest = { pickerDialogTarget = NONE },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            when (pickerDialogTarget) {
-                                START -> startTime = Time(timePickerState.hour, timePickerState.minute)
-                                END -> endTime = Time(timePickerState.hour, timePickerState.minute)
-                                else -> error("Invalid pickerDialogTarget!")
-                            }
-                            pickerDialogTarget = NONE
-                        }) {
-                            Text(text = stringResource(R.string.ok))
-                        }
+                TimePickerDialogWrapper(
+                    activeTime = when (pickerDialogTarget) {
+                        START -> startTime
+                        END -> endTime
+                        else -> error("Invalid pickerDialogTarget!") // 起こりえない
                     },
-                    dismissButton = {
-                        TextButton(onClick = { pickerDialogTarget = NONE }) {
-                            Text(text = stringResource(R.string.cancel))
+                    onDismiss = { pickerDialogTarget = NONE },
+                    onConfirm = { time ->
+                        when (pickerDialogTarget) {
+                            START -> startTime = time
+                            END -> endTime = time
+                            else -> error("Invalid pickerDialogTarget!")
                         }
+                        pickerDialogTarget = NONE
                     }
-                ) {
-                    TimePicker(state = timePickerState)
-                }
+                )
             }
         }
         Button(
@@ -189,6 +172,37 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
 }
 private enum class PickerDialogTarget {
     START, END, NONE
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TimePickerDialogWrapper(
+    activeTime: Time,
+    onDismiss: () -> Unit,
+    onConfirm: (Time) -> Unit
+) {
+    val timePickerState = rememberTimePickerState(
+        initialHour = activeTime.hour,
+        initialMinute = activeTime.minute,
+        is24Hour = true
+    )
+    TimePickerDialog(
+        onDismissRequest = { onDismiss() },
+        confirmButton = {
+            TextButton(onClick = {
+                val time = Time(timePickerState.hour, timePickerState.minute)
+                onConfirm(time)
+            }) {
+                Text(text = stringResource(R.string.ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        }
+    ) {
+        TimePicker(state = timePickerState)
+    }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
