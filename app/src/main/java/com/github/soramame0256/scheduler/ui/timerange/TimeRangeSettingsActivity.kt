@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
@@ -222,23 +223,19 @@ private fun InteractiveTimePickerBox(
     shownValue: String,
 ) {
     Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
+        modifier = modifier.clickable(onClick = onClick)
     ) {
-        val interactionSource = remember { MutableInteractionSource() }
-        LaunchedEffect(interactionSource) {
-            interactionSource.interactions.collect {
-                if (it is PressInteraction.Release) {
-                    onClick()
-                }
-            }
-        }
         OutlinedTextField(
             value = shownValue,
             onValueChange = { },
-            readOnly = true,
+            modifier = Modifier.fillMaxWidth(),
             label = label,
-            interactionSource = interactionSource
+            enabled = false,
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
     }
 
