@@ -40,21 +40,16 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val editTextTimeEnd = binding.editTextTimeEnd
         val addButton = binding.button
         viewModel.load()
-
         // UiEventの処理
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.timeRanges
-                    .collect { list ->
+                launch {
+                    viewModel.timeRanges.collect { list ->
                         timeRangeAdapter.submitList(list)
                     }
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.events
-                    .collect { event ->
+                }
+                launch {
+                    viewModel.events.collect { event ->
                         when (event) {
                             is UiEvent.Message -> {
                                 val resId = when (event.id) {
@@ -66,8 +61,10 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
                             }
                         }
                     }
+                }
             }
         }
+        // 追加処理
         addButton.setOnClickListener {
             val parsed = parseAndValidateInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
             when (parsed) {
