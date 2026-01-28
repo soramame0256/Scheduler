@@ -22,4 +22,7 @@
     <string name="empty_input">入力値が空です</string>
     <string name="time_range_placeholder"><![CDATA[00:00->00:00]]></string>
     <string name="start_time_later_than_end">開始時刻が終了時刻より後です</string>
+    <string name="cancel">キャンセル</string>
+    <string name="OK">OK</string>
+    <string name="ok">OK</string>
 </resources>

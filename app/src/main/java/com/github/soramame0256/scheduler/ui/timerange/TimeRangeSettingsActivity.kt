@@ -8,36 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerDefaults
-import androidx.compose.material3.TimePickerState
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberTimePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -128,8 +103,8 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
 private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
-    val startTimePickerState = rememberTimePickerState(is24Hour = true)
-    val endTimePickerState = rememberTimePickerState(is24Hour = true)
+    var endTime: Time by remember { mutableStateOf(Time(0, 0)) }
+    var startTime: Time by remember { mutableStateOf(Time(0, 0)) }
     Column {
         Text(
             text = stringResource(id = R.string.time_range_settings_category_add),
@@ -153,7 +128,7 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                     }
                 },
                 label = { Text(text = stringResource(R.string.time_range_settings_starttime_in)) },
-                pickerState = startTimePickerState
+                shownValue = startTime.toString()
             )
             InteractiveTimePickerBox(
                 onInteract = { interactionSource ->
@@ -167,39 +142,56 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
                     }
                 },
                 label = { Text(text = stringResource(R.string.time_range_settings_endtime_in)) },
-                pickerState = endTimePickerState
+                shownValue = endTime.toString()
             )
             if (showStartTimePicker) {
+                val timePickerState = rememberTimePickerState(
+                    initialHour = startTime.hour,
+                    initialMinute = startTime.minute,
+                    is24Hour = true
+                )
+
                 TimePickerDialog(
                     onDismissRequest = { showStartTimePicker = false },
                     confirmButton = {
-                        TextButton(onClick = { showStartTimePicker = false }) {
-                            Text("OK")
+                        TextButton(onClick = {
+                            showStartTimePicker = false
+                            startTime = Time(timePickerState.hour, timePickerState.minute)
+                        }) {
+                            Text(text = stringResource(R.string.ok))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showStartTimePicker = false }) {
-                            Text("Cancel")
+                            Text(text = stringResource(R.string.cancel))
                         }
                     }
                 ) {
-                    TimePicker(state = startTimePickerState)
+                    TimePicker(state = timePickerState)
                 }
             } else if (showEndTimePicker) {
+                val timePickerState = rememberTimePickerState(
+                    initialHour = endTime.hour,
+                    initialMinute = endTime.minute,
+                    is24Hour = true
+                )
                 TimePickerDialog(
                     onDismissRequest = { showEndTimePicker = false },
                     confirmButton = {
-                        TextButton(onClick = { showEndTimePicker = false }) {
-                            Text("OK")
+                        TextButton(onClick = {
+                            showEndTimePicker = false
+                            endTime = Time(timePickerState.hour, timePickerState.minute)
+                        }) {
+                            Text(text = stringResource(R.string.ok))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showEndTimePicker = false }) {
-                            Text("Cancel")
+                            Text(text = stringResource(R.string.cancel))
                         }
                     }
                 ) {
-                    TimePicker(state = endTimePickerState)
+                    TimePicker(state = timePickerState)
                 }
             }
         }
@@ -207,14 +199,10 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
             onClick = {
                 showStartTimePicker = false
                 showEndTimePicker = false
-                val start = Time(startTimePickerState.hour, startTimePickerState.minute)
-                val end = Time(endTimePickerState.hour, endTimePickerState.minute)
-                onAdd(start, end)
+                onAdd(startTime, endTime)
                 // 入力フィールドをクリア
-                startTimePickerState.hour = 0
-                startTimePickerState.minute = 0
-                endTimePickerState.hour = 0
-                endTimePickerState.minute = 0
+                startTime = Time(0, 0)
+                endTime = Time(0, 0)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -229,13 +217,13 @@ private fun TimeRangeInput(onAdd: (Time, Time) -> Unit) {
 private fun InteractiveTimePickerBox(
     onInteract: @Composable (MutableInteractionSource) -> Unit,
     label: @Composable () -> Unit,
-    pickerState: TimePickerState
+    shownValue: String
 ){
     Box(
         contentAlignment = Alignment.Center
     ) {
         OutlinedTextField(
-            value = "${pickerState.hour}:${pickerState.minute}",
+            value = shownValue,
             onValueChange = { },
             readOnly = true,
             label = label,
