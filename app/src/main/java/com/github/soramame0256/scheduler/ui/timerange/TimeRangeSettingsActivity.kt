@@ -10,12 +10,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.github.soramame0256.scheduler.R
 import com.github.soramame0256.scheduler.databinding.TimeRangeSettingsActivityBinding
 import com.github.soramame0256.scheduler.model.Time
-import com.github.soramame0256.scheduler.model.TimeRange
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 
 /*
 後でJetpack Composeに書き換え
@@ -25,7 +21,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
     private lateinit var binding: TimeRangeSettingsActivityBinding
     private lateinit var timeRangeAdapter: TimeRangeRecyclerAdapter
 
-    private val viewModel : TimeRangeSettingsViewModel by viewModels()
+    private val viewModel: TimeRangeSettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val editTextTimeEnd = binding.editTextTimeEnd
         val addButton = binding.button
         viewModel.load()
-        
+
         // UiEventの処理
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -73,7 +69,7 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
             }
         }
         addButton.setOnClickListener {
-           val parsed = parseAndValidateInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
+            val parsed = parseAndValidateInput(editTextTimeStart.text.toString(), editTextTimeEnd.text.toString())
             when (parsed) {
                 is TimeInputResult.Empty -> showToast(R.string.empty_input)
                 is TimeInputResult.InvalidFormat -> showToast(R.string.invalid_input)
@@ -96,7 +92,8 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         if (startTimeString.isEmpty() || endTimeString.isEmpty()) return TimeInputResult.Empty
 
         if (!timeValidator.matches(startTimeString) ||
-            !timeValidator.matches(endTimeString)) return TimeInputResult.InvalidFormat
+            !timeValidator.matches(endTimeString)
+        ) return TimeInputResult.InvalidFormat
         val start = parseTime(startTimeString)
         val end = parseTime(endTimeString)
 
@@ -109,11 +106,13 @@ class TimeRangeSettingsActivity : AppCompatActivity() {
         val minute = parts[1].toInt()
         return Time(hour, minute)
     }
+
     sealed class TimeInputResult {
         data class Success(val start: Time, val end: Time) : TimeInputResult()
         object Empty : TimeInputResult()
         object InvalidFormat : TimeInputResult()
     }
+
     companion object {
         @JvmStatic
         val timeValidator = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$".toRegex()
