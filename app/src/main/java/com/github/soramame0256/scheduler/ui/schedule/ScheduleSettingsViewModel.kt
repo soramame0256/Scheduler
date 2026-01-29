@@ -60,7 +60,12 @@ class ScheduleSettingsViewModel @Inject constructor(
         service.insertSchedule(newSchedule)
         resetInputs()
         _schedules.update { currentList ->
-            (currentList + newSchedule).sortedWith(compareBy({ it.weekday }, { it.timeRange.startTime }))
+            val comparator = compareBy<Schedule>({ it.weekday }, { it.timeRange.startTime })
+            val newList = currentList.toMutableList()
+            val insertionPoint = newList.binarySearch(newSchedule, comparator)
+                .let { if (it < 0) -(it + 1) else it }
+            newList.add(insertionPoint, newSchedule)
+            newList
         }
         _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InsertSuccess))
     }
