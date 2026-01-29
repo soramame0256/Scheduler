@@ -48,26 +48,26 @@ class ScheduleSettingsViewModel @Inject constructor(
         _schedules.value = _schedules.value.filterNot { schedule.weekday == it.weekday && schedule.timeRange.id == it.timeRange.id }
     }
     fun add(weekday: Weekday, timeRange: TimeRange, message: String) = viewModelScope.launch {
-        if (service.countConflictSchedules(weekday, timeRange) > 0) {
-            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.Conflict))
-            return@launch
-        }
         if (timeRange.id == (-1).toLong()) {
             _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InvalidTimeRange))
             return@launch
         }
         val newSchedule = Schedule(weekday, timeRange, message)
-        service.insertSchedule(newSchedule)
-        resetInputs()
-        _schedules.update { currentList ->
-            val comparator = compareBy<Schedule>({ it.weekday }, { it.timeRange.startTime })
-            val newList = currentList.toMutableList()
-            val insertionPoint = newList.binarySearch(newSchedule, comparator)
-                .let { if (it < 0) -(it + 1) else it }
-            newList.add(insertionPoint, newSchedule)
-            newList
+        try {
+            service.insertSchedule(newSchedule)
+            resetInputs()
+            _schedules.update { currentList ->
+                val comparator = compareBy<Schedule>({ it.weekday }, { it.timeRange.startTime })
+                val newList = currentList.toMutableList()
+                val insertionPoint = newList.binarySearch(newSchedule, comparator)
+                    .let { if (it < 0) -(it + 1) else it }
+                newList.add(insertionPoint, newSchedule)
+                newList
+            }
+            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InsertSuccess))
+        } catch (e: Exception) {
+            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.Conflict))
         }
-        _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InsertSuccess))
     }
 
     private fun resetInputs() {
