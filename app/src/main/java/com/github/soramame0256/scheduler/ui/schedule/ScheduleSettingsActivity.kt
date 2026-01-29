@@ -132,12 +132,12 @@ private fun ScheduleInput(
         OutlinedTextField(
             value = message,
             onValueChange = onMessageUpdate,
-            label = { Text("Message") },
+            label = { Text(stringResource(R.string.schedule_textfiled_placeholder)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Button(onClick = { onAdd() }) {
-            Text(text = "Add")
+            Text(text = R.string.add)
         }
     }
 }
