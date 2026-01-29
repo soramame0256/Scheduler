@@ -66,7 +66,7 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(stringResource(id = R.string.title_activity_time_range_settings)) })
+            TopAppBar(title = { Text(stringResource(id = R.string.title_activity_schedule_settings)) })
         }
     ) { innerPadding ->
         Column(
