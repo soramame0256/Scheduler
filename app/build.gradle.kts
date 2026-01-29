@@ -46,6 +46,7 @@ ksp {
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.material3)
     val roomVersion = "2.6.1"
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
@@ -54,7 +55,6 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
     implementation(libs.hilt.android)

@@ -53,13 +53,13 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
     // イベントのハンドリング
     LaunchedEffect(events) {
         events.handle { event ->
-            if (event is UiEvent.NoOperation) return@handle
+            if (event is TimeRangeUiEvent.NoOperation) return@handle
 
-            if (event is UiEvent.Message) {
+            if (event is TimeRangeUiEvent.Message) {
                 val resId = when (event.id) {
-                    MessageId.InsertSuccess -> R.string.time_range_insert_success
-                    MessageId.Conflict -> R.string.time_range_settings_conflict
-                    MessageId.StartAfterEnd -> R.string.start_time_later_than_end
+                    TimeRangeInsertMessageId.InsertSuccess -> R.string.insert_success
+                    TimeRangeInsertMessageId.Conflict -> R.string.settings_conflict
+                    TimeRangeInsertMessageId.StartAfterEnd -> R.string.start_time_later_than_end
                 }
                 Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
             }

@@ -1,11 +1,11 @@
 package com.github.soramame0256.scheduler.repository
 
 import androidx.room.Dao
-import androidx.room.Transaction
-import androidx.room.Query
 import androidx.room.Delete
-import androidx.room.Update
 import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.repository.entity.ScheduleEntity
@@ -55,5 +55,8 @@ interface ScheduleDao {
     suspend fun getTimeRangeById(id: Long): TimeRangeEntity?
 
     @Query("SELECT COUNT(*) FROM time_range WHERE :start < endTime AND start < :end")
-    suspend fun countConflicts(start: Time, end: Time): Int
+    suspend fun countConflictTimeRanges(start: Time, end: Time): Int
+
+    @Query("SELECT COUNT(*) FROM schedule WHERE weekday = :weekday AND timetableId = :timeRangeId")
+    suspend fun countConflictSchedules(weekday: Weekday, timeRangeId: Long): Int
 }

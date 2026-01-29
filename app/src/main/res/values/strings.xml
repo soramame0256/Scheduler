@@ -11,8 +11,8 @@
     <string name="_00_00">00:00</string>
     <string name="time_range_settings_starttime_in">開始時刻を選択</string>
     <string name="time_range_settings_endtime_in">終了時刻を選択</string>
-    <string name="time_range_insert_success">追加しました!</string>
-    <string name="time_range_settings_conflict">競合する値が存在します!</string>
+    <string name="insert_success">追加しました!</string>
+    <string name="settings_conflict">競合する値が存在します!</string>
     <string name="invalid_input">入力値が正しくありません!</string>
     <!-- time_range_settings_category_addとaddは少し意味が異なるので棲み分け -->
     <string name="time_range_settings_category_add">追加</string>
@@ -24,4 +24,19 @@
     <string name="start_time_later_than_end">開始時刻が終了時刻より後です</string>
     <string name="cancel">キャンセル</string>
     <string name="ok">OK</string>
+    <string name="title_activity_schedule_settings">予定設定</string>
+    <string name="invalid_time_range">不明な時間割です!\n時間割は一つ以上入っていますか?</string>
+    <string name="schedule_textfield_placeholder">ここに予定を入力</string>
+    <string name="schedule_settings_dontreset">追加時に情報をリセットしない</string>
+    <string name="weekday_sunday">日曜日</string>
+    <string name="weekday_monday">月曜日</string>
+    <string name="weekday_tuesday">火曜日</string>
+    <string name="weekday_wednesday">水曜日</string>
+    <string name="weekday_thursday">木曜日</string>
+    <string name="weekday_friday">金曜日</string>
+    <string name="weekday_saturday">土曜日</string>
+    <string name="weekday_error">エラー</string>
+    <string name="weekday">曜日</string>
+    <string name="timerange">時間割</string>
+    <string name="schedule_item_format">%1$s %2$s: %3$s</string>
 </resources>

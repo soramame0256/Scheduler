@@ -52,7 +52,10 @@ class ScheduleServiceImpl @Inject constructor(
 
     override suspend fun deleteTimeRange(timeRange: TimeRange) = dao.deleteTimeRange(timeRangeMapper.toEntity(timeRange))
 
-    override suspend fun countConflicts(start: Time, end: Time): Int = dao.countConflicts(start, end)
+    override suspend fun countConflictTimeRanges(start: Time, end: Time): Int = dao.countConflictTimeRanges(start, end)
+
+    override suspend fun countConflictSchedules(weekday: Weekday, timeRange: TimeRange): Int = dao.countConflictSchedules(weekday, timeRange.id)
+
     private fun CombinedSchedule?.toScheduleResult(): Result<Schedule> {
         return this?.let { Result.success(scheduleMapper.toDomain(it)) }
             ?: Result.failure(ScheduleNotFoundException())
