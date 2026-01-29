@@ -296,7 +296,12 @@ private fun ScheduleItem(schedule: Schedule, onDelete: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "${stringResource(schedule.weekday.toStringRes())} ${schedule.timeRange}: ${schedule.message}",
+            text = stringResource(
+                R.string.schedule_item_format,
+                stringResource(schedule.weekday.toStringRes()),
+                schedule.timeRange.toString(),
+                schedule.message
+            ),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(weight = 1f)
         )
