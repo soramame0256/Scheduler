@@ -57,8 +57,8 @@ private fun TimeRangeSettingsScreen(viewModel: TimeRangeSettingsViewModel) {
 
             if (event is TimeRangeUiEvent.Message) {
                 val resId = when (event.id) {
-                    TimeRangeInsertMessageId.InsertSuccess -> R.string.time_range_insert_success
-                    TimeRangeInsertMessageId.Conflict -> R.string.time_range_settings_conflict
+                    TimeRangeInsertMessageId.InsertSuccess -> R.string.insert_success
+                    TimeRangeInsertMessageId.Conflict -> R.string.settings_conflict
                     TimeRangeInsertMessageId.StartAfterEnd -> R.string.start_time_later_than_end
                 }
                 Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
