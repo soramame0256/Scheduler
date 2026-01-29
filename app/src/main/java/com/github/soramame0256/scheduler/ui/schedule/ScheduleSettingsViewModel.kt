@@ -36,6 +36,9 @@ class ScheduleSettingsViewModel @Inject constructor(
     private val _message = MutableStateFlow("")
     val message: StateFlow<String> = _message
 
+    private val _dontReset = MutableStateFlow(false)
+    val dontReset: StateFlow<Boolean> = _dontReset
+
     fun load() = viewModelScope.launch {
         _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
         _selectedTimeRange.value = _timeRanges.value.firstOrNull() ?: TimeRange(-1, Time(0,0), Time(0, 0))
@@ -68,7 +71,7 @@ class ScheduleSettingsViewModel @Inject constructor(
     }
 
     private fun resetInputs() {
-        // TODO: 保持設定作った方がいいかも(連続した予定を入力することがまれにある)
+        if (_dontReset.value) return
         _message.value = ""
     }
     fun updateSelectedWeekday(weekday: Weekday) {
@@ -79,6 +82,9 @@ class ScheduleSettingsViewModel @Inject constructor(
     }
     fun updateMessage(message: String) {
         _message.value = message
+    }
+    fun updateDontReset(dontReset: Boolean) {
+        _dontReset.value = dontReset
     }
 }
 sealed class ScheduleUiEvent {

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,6 +50,7 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
     val weekday by viewModel.selectedWeekday.collectAsState()
     val timeRange by viewModel.selectedTimeRange.collectAsState()
     val message by viewModel.message.collectAsState()
+    val dontReset by viewModel.dontReset.collectAsState()
     // イベントのハンドリング
     LaunchedEffect(events) {
         events.handle { event ->
@@ -84,9 +86,11 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
                 onWeekdayUpdate = { viewModel.updateSelectedWeekday(it) },
                 onTimeRangeUpdate = { viewModel.updateSelectedTimeRange(it) },
                 onMessageUpdate = { viewModel.updateMessage(it) },
+                onDontResetUpdate = { viewModel.updateDontReset(it) },
                 weekday = weekday,
                 timeRange = timeRange,
-                message = message
+                message = message,
+                dontReset = dontReset
             )
             LazyColumn(
                 modifier = Modifier.padding(top = 8.dp).weight(1f)
@@ -110,9 +114,11 @@ private fun ScheduleInput(
     onWeekdayUpdate: (Weekday) -> Unit = {},
     onTimeRangeUpdate: (TimeRange) -> Unit = {},
     onMessageUpdate: (String) -> Unit = {},
+    onDontResetUpdate: (Boolean) -> Unit = {},
     weekday: Weekday,
     timeRange: TimeRange,
-    message: String
+    message: String,
+    dontReset: Boolean
 ) {
 
     Column {
@@ -132,12 +138,21 @@ private fun ScheduleInput(
         OutlinedTextField(
             value = message,
             onValueChange = onMessageUpdate,
-            label = { Text(stringResource(R.string.schedule_textfiled_placeholder)) },
+            label = { Text(stringResource(R.string.schedule_textfield_placeholder)) },
             modifier = Modifier.fillMaxWidth()
         )
-
         Button(onClick = { onAdd() }) {
             Text(text = stringResource(R.string.add))
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Checkbox(
+                checked = dontReset,
+                onCheckedChange = onDontResetUpdate
+            )
+            Text(text = stringResource(R.string.schedule_settings_dontreset))
         }
     }
 }
