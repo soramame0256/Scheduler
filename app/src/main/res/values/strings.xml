@@ -28,4 +28,12 @@
     <string name="invalid_time_range">不明な時間割です!\n時間割は一つ以上入っていますか?</string>
     <string name="schedule_textfield_placeholder">ここに予定を入力</string>
     <string name="schedule_settings_dontreset">追加時に情報をリセットしない</string>
+    <string name="weekday_sunday">日曜日</string>
+    <string name="weekday_monday">月曜日</string>
+    <string name="weekday_tuesday">火曜日</string>
+    <string name="weekday_wednesday">水曜日</string>
+    <string name="weekday_thursday">木曜日</string>
+    <string name="weekday_friday">金曜日</string>
+    <string name="weekday_saturday">土曜日</string>
+    <string name="weekday_error">エラー</string>
 </resources>

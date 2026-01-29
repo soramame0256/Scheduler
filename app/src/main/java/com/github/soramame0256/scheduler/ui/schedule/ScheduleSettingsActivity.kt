@@ -188,7 +188,7 @@ private fun WeekdayDropdown(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = selected.name,
+            value = stringResource(selected.toStringRes()),
             onValueChange = {},
             readOnly = true,
             singleLine = true,
@@ -206,7 +206,7 @@ private fun WeekdayDropdown(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option.name, style = MaterialTheme.typography.bodyLarge) },
+                    text = { Text(stringResource(option.toStringRes()), style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
                         onSelectedChange(option)
                         expanded = false
@@ -217,6 +217,17 @@ private fun WeekdayDropdown(
     }
 }
 
+@androidx.annotation.StringRes
+private fun Weekday.toStringRes(): Int = when (this) {
+    Weekday.SUNDAY -> R.string.weekday_sunday
+    Weekday.MONDAY -> R.string.weekday_monday
+    Weekday.TUESDAY -> R.string.weekday_tuesday
+    Weekday.WEDNESDAY -> R.string.weekday_wednesday
+    Weekday.THURSDAY -> R.string.weekday_thursday
+    Weekday.FRIDAY -> R.string.weekday_friday
+    Weekday.SATURDAY -> R.string.weekday_saturday
+    Weekday.ERROR -> R.string.weekday_error
+}
 @Composable
 private fun TimeRangeInput(
     modifier: Modifier = Modifier,
