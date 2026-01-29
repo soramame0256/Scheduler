@@ -68,6 +68,8 @@ class ScheduleSettingsViewModel @Inject constructor(
     }
 
     private fun resetInputs() {
+        // TODO: 保持設定作った方がいいかも(連続した予定を入力することがまれにある)
+        _message.value = ""
     }
     fun updateSelectedWeekday(weekday: Weekday) {
         _selectedWeekday.value = weekday
