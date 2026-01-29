@@ -42,8 +42,7 @@ class ScheduleSettingsViewModel @Inject constructor(
     fun load() = viewModelScope.launch {
         _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
         _selectedTimeRange.value = _timeRanges.value.firstOrNull() ?: TimeRange(-1, Time(0,0), Time(0, 0))
-        _schedules.value = service.getSchedules()
-    }
+        _schedules.value = service.getSchedules().sortedWith(compareBy({ it.weekday }, { it.timeRange.startTime }))    }
     fun delete(schedule: Schedule) = viewModelScope.launch {
         service.deleteSchedule(schedule)
         _schedules.value = _schedules.value.filterNot { schedule.weekday == it.weekday && schedule.timeRange.id == it.timeRange.id }
@@ -61,11 +60,7 @@ class ScheduleSettingsViewModel @Inject constructor(
         resetInputs()
         service.insertSchedule(newSchedule)
         _schedules.update { currentList ->
-            val newList = currentList.toMutableList()
-            val insertionPoint = newList.binarySearchBy(newSchedule.weekday) { it.weekday }
-                .let { if (it < 0) -(it + 1) else it }
-            newList.add(insertionPoint, newSchedule)
-            newList
+            (currentList + newSchedule).sortedWith(compareBy({ it.weekday }, { it.timeRange.startTime }))
         }
         _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InsertSuccess))
     }
