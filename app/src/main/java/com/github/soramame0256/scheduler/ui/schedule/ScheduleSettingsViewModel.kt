@@ -57,8 +57,8 @@ class ScheduleSettingsViewModel @Inject constructor(
             return@launch
         }
         val newSchedule = Schedule(weekday, timeRange, message)
-        resetInputs()
         service.insertSchedule(newSchedule)
+        resetInputs()
         _schedules.update { currentList ->
             (currentList + newSchedule).sortedWith(compareBy({ it.weekday }, { it.timeRange.startTime }))
         }
