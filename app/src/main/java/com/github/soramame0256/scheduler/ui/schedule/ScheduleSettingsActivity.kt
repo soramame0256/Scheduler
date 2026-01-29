@@ -137,7 +137,7 @@ private fun ScheduleInput(
         )
 
         Button(onClick = { onAdd() }) {
-            Text(text = R.string.add)
+            Text(text = stringResource(R.string.add))
         }
     }
 }
