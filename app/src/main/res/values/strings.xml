@@ -36,4 +36,6 @@
     <string name="weekday_friday">金曜日</string>
     <string name="weekday_saturday">土曜日</string>
     <string name="weekday_error">エラー</string>
+    <string name="weekday">曜日</string>
+    <string name="timerange">時間割</string>
 </resources>

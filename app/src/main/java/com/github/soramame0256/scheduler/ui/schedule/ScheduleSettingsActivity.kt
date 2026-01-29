@@ -178,7 +178,7 @@ private fun WeekdayDropdown(
     options: List<Weekday> = Weekday.entries.filterNot { weekday -> weekday == Weekday.ERROR },
     selected: Weekday,
     onSelectedChange: (Weekday) -> Unit,
-    label: String = "Weekday"
+    label: String = stringResource(R.string.weekday)
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -251,7 +251,7 @@ private fun TimeRangeDropdown(
     options: List<TimeRange>,
     selected: TimeRange,
     onSelectedChange: (TimeRange) -> Unit,
-    label: String = "TimeRange"
+    label: String = stringResource(R.string.timerange)
 ) {
     var expanded by remember { mutableStateOf(false) }
 
