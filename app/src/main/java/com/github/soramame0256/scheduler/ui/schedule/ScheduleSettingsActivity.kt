@@ -166,8 +166,7 @@ private fun WeekdayInput(
     WeekdayDropdown(
         modifier = modifier,
         selected = selected,
-        onSelectedChange = { onSelectedChange(it) },
-        label = "Weekday"
+        onSelectedChange = { onSelectedChange(it) }
     )
 }
 
@@ -239,7 +238,6 @@ private fun TimeRangeInput(
         modifier = modifier,
         selected = selected,
         onSelectedChange = { onSelectedChange(it) },
-        label = "TimeRange",
         options = timeRanges
     )
 }
