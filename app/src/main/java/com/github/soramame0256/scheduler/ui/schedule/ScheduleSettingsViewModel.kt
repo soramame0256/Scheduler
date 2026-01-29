@@ -38,7 +38,7 @@ class ScheduleSettingsViewModel @Inject constructor(
 
     fun load() = viewModelScope.launch {
         _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
-        _selectedTimeRange.value = _timeRanges.value.first()
+        _selectedTimeRange.value = _timeRanges.value.firstOrNull() ?: TimeRange(-1, Time(0,0), Time(0, 0))
         _schedules.value = service.getSchedules()
     }
     fun delete(schedule: Schedule) = viewModelScope.launch {
@@ -48,6 +48,10 @@ class ScheduleSettingsViewModel @Inject constructor(
     fun add(weekday: Weekday, timeRange: TimeRange, message: String) = viewModelScope.launch {
         if (service.countConflictSchedules(weekday, timeRange) > 0) {
             _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.Conflict))
+            return@launch
+        }
+        if (timeRange.id == (-1).toLong()) {
+            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InvalidTimeRange))
             return@launch
         }
         val newSchedule = Schedule(weekday, timeRange, message)
@@ -81,6 +85,6 @@ sealed class ScheduleUiEvent {
 }
 
 enum class ScheduleInsertMessageId {
-    InsertSuccess, Conflict
+    InsertSuccess, Conflict, InvalidTimeRange
 }
 

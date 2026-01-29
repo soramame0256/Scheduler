@@ -25,4 +25,5 @@
     <string name="cancel">キャンセル</string>
     <string name="ok">OK</string>
     <string name="title_activity_schedule_settings">予定設定</string>
+    <string name="invalid_time_range">不明な時間割です!\n時間割は一つ以上入っていますか?</string>
 </resources>

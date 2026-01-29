@@ -58,6 +58,7 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
                 val resId = when (event.id) {
                     ScheduleInsertMessageId.Conflict -> R.string.settings_conflict
                     ScheduleInsertMessageId.InsertSuccess -> R.string.insert_success
+                    ScheduleInsertMessageId.InvalidTimeRange -> R.string.invalid_time_range
                 }
                 Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
             }
