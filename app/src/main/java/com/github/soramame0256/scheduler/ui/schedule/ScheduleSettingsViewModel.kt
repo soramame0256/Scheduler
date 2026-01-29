@@ -3,6 +3,7 @@ package com.github.soramame0256.scheduler.ui.schedule
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.soramame0256.scheduler.model.Schedule
+import com.github.soramame0256.scheduler.model.Time
 import com.github.soramame0256.scheduler.model.TimeRange
 import com.github.soramame0256.scheduler.model.Weekday
 import com.github.soramame0256.scheduler.service.ScheduleService
@@ -19,16 +20,30 @@ class ScheduleSettingsViewModel @Inject constructor(
     private val service: ScheduleService
 ): ViewModel() {
 
+    private val _timeRanges = MutableStateFlow<List<TimeRange>>(emptyList())
+    val timeRanges: StateFlow<List<TimeRange>> = _timeRanges
     private val _schedules = MutableStateFlow<List<Schedule>>(emptyList())
     val schedules: StateFlow<List<Schedule>> = _schedules
     private val _events = MutableStateFlow<EventWrapper<ScheduleUiEvent>>(EventWrapper(ScheduleUiEvent.NoOperation()))
     val events: StateFlow<EventWrapper<ScheduleUiEvent>> = _events
 
+    private val _selectedWeekday = MutableStateFlow(Weekday.MONDAY)
+    val selectedWeekday: StateFlow<Weekday> = _selectedWeekday
 
-    fun load() {
+    private val _selectedTimeRange = MutableStateFlow(TimeRange(-1, Time(0,0), Time(0, 0)))
+    val selectedTimeRange: StateFlow<TimeRange> = _selectedTimeRange
+
+    private val _message = MutableStateFlow("")
+    val message: StateFlow<String> = _message
+
+    fun load() = viewModelScope.launch {
+        _timeRanges.value = service.getAllTimeRanges().sortedBy { it.startTime }
+        _selectedTimeRange.value = _timeRanges.value.first()
+        _schedules.value = service.getSchedules()
     }
-    fun delete(schedule: Schedule) {
-
+    fun delete(schedule: Schedule) = viewModelScope.launch {
+        service.deleteSchedule(schedule)
+        _schedules.value = _schedules.value.filterNot { schedule.weekday == it.weekday && schedule.timeRange.id == it.timeRange.id }
     }
     fun add(weekday: Weekday, timeRange: TimeRange, message: String) = viewModelScope.launch {
         if (service.countConflictSchedules(weekday, timeRange) > 0) {
@@ -49,6 +64,15 @@ class ScheduleSettingsViewModel @Inject constructor(
     }
 
     private fun resetInputs() {
+    }
+    fun updateSelectedWeekday(weekday: Weekday) {
+        _selectedWeekday.value = weekday
+    }
+    fun updateSelectedTimeRange(timeRange: TimeRange) {
+        _selectedTimeRange.value = timeRange
+    }
+    fun updateMessage(message: String) {
+        _message.value = message
     }
 }
 sealed class ScheduleUiEvent {
