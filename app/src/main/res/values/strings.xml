@@ -39,4 +39,10 @@
     <string name="weekday">曜日</string>
     <string name="timerange">時間割</string>
     <string name="schedule_item_format">%1$s %2$s: %3$s</string>
+    <string name="schedule_edit">編集</string>
+    <string name="schedule_save">保存</string>
+    <string name="schedule_edit_success">更新しました!</string>
+    <string name="schedule_edit_failure">更新に失敗しました!</string>
+    <string name="schedule_edit_weekday_format">曜日: %1$s</string>
+    <string name="schedule_edit_timerange_format">時間割: %1$s</string>
 </resources>

@@ -47,6 +47,24 @@ class ScheduleSettingsViewModel @Inject constructor(
         service.deleteSchedule(schedule)
         _schedules.value = _schedules.value.filterNot { schedule.weekday == it.weekday && schedule.timeRange.id == it.timeRange.id }
     }
+    fun edit(schedule: Schedule, newMessage: String) = viewModelScope.launch {
+        val updatedSchedule = schedule.copy(message = newMessage)
+        try {
+            service.updateSchedule(updatedSchedule)
+            _schedules.update { currentList ->
+                currentList.map {
+                    if (it.weekday == schedule.weekday && it.timeRange.id == schedule.timeRange.id) {
+                        updatedSchedule
+                    } else {
+                        it
+                    }
+                }
+            }
+            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.EditSuccess))
+        } catch (e: Exception) {
+            _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.EditFailure))
+        }
+    }
     fun add(weekday: Weekday, timeRange: TimeRange, message: String) = viewModelScope.launch {
         if (timeRange.id == (-1).toLong()) {
             _events.value = EventWrapper(ScheduleUiEvent.Message(ScheduleInsertMessageId.InvalidTimeRange))
@@ -93,6 +111,5 @@ sealed class ScheduleUiEvent {
 }
 
 enum class ScheduleInsertMessageId {
-    InsertSuccess, Conflict, InvalidTimeRange
+    InsertSuccess, Conflict, InvalidTimeRange, EditSuccess, EditFailure
 }
-

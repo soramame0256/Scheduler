@@ -50,6 +50,7 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
     val timeRange by viewModel.selectedTimeRange.collectAsState()
     val message by viewModel.message.collectAsState()
     val dontReset by viewModel.dontReset.collectAsState()
+    var editingSchedule by remember { mutableStateOf<Schedule?>(null) }
     // イベントのハンドリング
     LaunchedEffect(events) {
         events.handle { event ->
@@ -60,6 +61,8 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
                     ScheduleInsertMessageId.Conflict -> R.string.settings_conflict
                     ScheduleInsertMessageId.InsertSuccess -> R.string.insert_success
                     ScheduleInsertMessageId.InvalidTimeRange -> R.string.invalid_time_range
+                    ScheduleInsertMessageId.EditSuccess -> R.string.schedule_edit_success
+                    ScheduleInsertMessageId.EditFailure -> R.string.schedule_edit_failure
                 }
                 Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
             }
@@ -97,12 +100,23 @@ private fun ScheduleSettingsScreen(viewModel: ScheduleSettingsViewModel) {
                 items(schedules, key = { "${it.weekday.value} ${it.timeRange.id}" }) { schedule ->
                     ScheduleItem(
                         schedule = schedule,
+                        onEdit = { editingSchedule = schedule },
                         onDelete = { viewModel.delete(schedule) }
                     )
                 }
             }
         }
 
+    }
+    editingSchedule?.let { schedule ->
+        ScheduleEditDialog(
+            schedule = schedule,
+            onDismiss = { editingSchedule = null },
+            onSave = { newMessage ->
+                viewModel.edit(schedule, newMessage)
+                editingSchedule = null
+            }
+        )
     }
 }
 
@@ -287,7 +301,7 @@ private fun TimeRangeDropdown(
     }
 }
 @Composable
-private fun ScheduleItem(schedule: Schedule, onDelete: () -> Unit) {
+private fun ScheduleItem(schedule: Schedule, onEdit: () -> Unit, onDelete: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -305,8 +319,54 @@ private fun ScheduleItem(schedule: Schedule, onDelete: () -> Unit) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(weight = 1f)
         )
-        Button(onClick = onDelete) {
-            Text(text = stringResource(id = R.string.header_delete))
+        Row {
+            Button(onClick = onEdit) {
+                Text(text = stringResource(id = R.string.schedule_edit))
+            }
+            Button(onClick = onDelete) {
+                Text(text = stringResource(id = R.string.header_delete))
+            }
         }
     }
+}
+
+@Composable
+private fun ScheduleEditDialog(
+    schedule: Schedule,
+    onDismiss: () -> Unit,
+    onSave: (String) -> Unit
+) {
+    var message by remember(schedule) { mutableStateOf(schedule.message) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.schedule_edit)) },
+        text = {
+            Column {
+                Text(
+                    stringResource(
+                        R.string.schedule_edit_weekday_format,
+                        stringResource(schedule.weekday.toStringRes())
+                    )
+                )
+                Text(stringResource(R.string.schedule_edit_timerange_format, schedule.timeRange.toString()))
+                OutlinedTextField(
+                    value = message,
+                    onValueChange = { message = it },
+                    label = { Text(stringResource(R.string.schedule_textfield_placeholder)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onSave(message) }) {
+                Text(stringResource(R.string.schedule_save))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }
